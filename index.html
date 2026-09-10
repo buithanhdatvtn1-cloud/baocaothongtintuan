@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VNPT - Hệ Thống Báo Cáo Công Việc Tuần & Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SheetJS CDN cho tính năng Xuất Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen">
+
+    <!-- ================= 1. MÀN HÌNH ĐĂNG NHẬP ================= -->
+    <div id="login-screen" class="min-h-screen flex items-center justify-center bg-slate-100 px-4">
+        <div class="max-w-md w-full bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+            <!-- Header Login -->
+            <div class="bg-gradient-to-r from-blue-700 to-blue-600 p-8 text-center text-white relative">
+                <div class="bg-white p-3 rounded-xl inline-block shadow-md mb-3">
+                    <!-- Logo VNPT Vector/SVG -->
+                    <svg class="w-16 h-12" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10,20 Q40,5 75,30 Q90,40 85,60 Q80,75 50,75 Q20,75 15,50 Q10,35 30,25" stroke="#005BAA" stroke-width="12" fill="none" stroke-linecap="round"/>
+                        <circle cx="50" cy="45" r="14" fill="#005BAA"/>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold tracking-wide">ĐÀI VIỄN THÔNG NGHỆ AN</h2>
+                <p class="text-blue-100 text-xs mt-1 uppercase tracking-wider">Hệ Thống Quản Lý Báo Cáo Tuần</p>
+            </div>
+
+            <!-- Form Đăng Nhập -->
+            <form id="login-form" onsubmit="handleLogin(event)" class="p-8 space-y-5">
+                <div id="login-error" class="hidden bg-red-50 border-l-4 border-red-500 p-3 rounded text-red-700 text-xs">
+                    Tên đăng nhập hoặc mật khẩu không chính xác!
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Tài khoản</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" id="username" required placeholder="Nhập tên tài khoản..." 
+                            class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Mật khẩu</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" id="password" required placeholder="••••••••" 
+                            class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg shadow-md transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập
+                </button>
+
+                <!-- Gợi ý tài khoản để test -->
+                <div class="pt-4 border-t border-slate-100 text-[11px] text-slate-500 space-y-1">
+                    <p class="font-semibold text-slate-600">Danh sách tài khoản hệ thống:</p>
+                    <p>• Users: <span class="font-mono text-blue-600">tvkhoa, nhmai, nhquang, tkt, tvt</span> (Mật khẩu: <span class="font-mono text-slate-700">Adm@123</span>)</p>
+                    <p>• User quản trị: <span class="font-mono text-blue-600">baocaotuan</span> (Mật khẩu: <span class="font-mono text-slate-700">Dainan@123</span>)</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ================= 2. GIAO DIỆN CHÍNH (SAU KHI ĐĂNG NHẬP) ================= -->
+    <div id="main-app" class="hidden p-4 md:p-8 max-w-7xl mx-auto space-y-6">
+        
+        <!-- Header VNPT -->
+        <header class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <!-- Logo VNPT -->
+                <div class="bg-blue-50 p-2 rounded-lg border border-blue-100 flex items-center justify-center">
+                    <svg class="w-10 h-8" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10,20 Q40,5 75,30 Q90,40 85,60 Q80,75 50,75 Q20,75 15,50 Q10,35 30,25" stroke="#005BAA" stroke-width="12" fill="none" stroke-linecap="round"/>
+                        <circle cx="50" cy="45" r="14" fill="#005BAA"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-blue-800 tracking-tight flex items-center gap-2">
+                        ĐÀI VT NGHỆ AN - HỆ THỐNG BÁO CÁO CÔNG VIỆC TUẦN
+                    </h1>
+                    <p class="text-slate-500 text-xs">Quản lý tiến độ công việc, sự cố hạ tầng và kế hoạch tuần</p>
+                </div>
+            </div>
+
+            <!-- User Info & Global Actions -->
+            <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200">
+                    <label for="select-week-global" class="text-xs font-semibold text-slate-600">Tuần:</label>
+                    <input type="week" id="select-week-global" class="bg-white border border-slate-300 text-slate-700 text-xs rounded p-1 focus:ring-2 focus:ring-blue-500 outline-none" value="2026-W37">
+                </div>
+
+                <!-- Nút xuất file Excel -->
+                <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs py-2 px-3.5 rounded-lg shadow-sm transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-file-excel text-sm"></i> Xuất Báo Cáo Excel
+                </button>
+
+                <div class="flex items-center gap-3 pl-3 border-l border-slate-200">
+                    <div class="text-right">
+                        <div id="current-user-display" class="text-xs font-bold text-blue-700">User</div>
+                        <div class="text-[10px] text-slate-400">VNPT Telecom</div>
+                    </div>
+                    <button onclick="handleLogout()" title="Đăng xuất" class="p-2 bg-slate-100 hover:bg-red-50 hover:text-red-600 rounded-lg text-slate-600 transition-all">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="border-b border-slate-200 flex gap-2 md:gap-4 overflow-x-auto">
+            <button onclick="switchTab('tab-dashboard')" id="btn-tab-dashboard" class="pb-3 px-4 font-semibold text-blue-600 border-b-2 border-blue-600 transition-all flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-chart-pie"></i> Dashboard Thống Kê
+            </button>
+            <button onclick="switchTab('tab-thuc-hien')" id="btn-tab-thuc-hien" class="pb-3 px-4 font-semibold text-slate-500 hover:text-blue-600 transition-all flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-solid fa-list-check"></i> 1. Công Việc Thực Hiện Trong Tuần
+            </button>
+            <button onclick="switchTab('tab-ke-hoach')" id="btn-tab-ke-hoach" class="pb-3 px-4 font-semibold text-slate-500 hover:text-blue-600 transition-all flex items-center gap-2 whitespace-nowrap">
+                <i class="fa-regular fa-calendar-plus"></i> 2. Dự Kiến Kế Hoạch Tuần Tới
+            </button>
+        </div>
+
+        <!-- ================= SECTION 0: DASHBOARD THỐNG KÊ ================= -->
+        <section id="tab-dashboard" class="space-y-6">
+            
+            <!-- Card Tổng quan các chỉ số kỹ thuật & sự cố -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                
+                <!-- 1. Sự cố Cáp Quang (Phức hợp) -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 col-span-1 md:col-span-2 lg:col-span-1 relative overflow-hidden">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
+                                <i class="fa-solid fa-network-wired text-base"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-800">Sự Cố Cáp Quang</h3>
+                                <p class="text-[11px] text-slate-500">Phân loại theo chỉ tiêu kĩ thuật</p>
+                            </div>
+                        </div>
+                        <span id="stat-cap-quang-total" class="text-2xl font-extrabold text-indigo-700">0</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                            <span class="text-slate-500 block text-[11px]">Do chủ quan</span>
+                            <span id="stat-cq-chu-quan" class="font-bold text-slate-800 text-sm">0</span>
+                        </div>
+                        <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                            <span class="text-slate-500 block text-[11px]">Chưa hoàn thành trách nhiệm</span>
+                            <span id="stat-cq-trach-nhiem" class="font-bold text-slate-800 text-sm">0</span>
+                        </div>
+                        <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                            <span class="text-slate-500 block text-[11px]">Suy hao / Đứt sợi</span>
+                            <span id="stat-cq-suy-hao" class="font-bold text-amber-600 text-sm">0</span>
+                        </div>
+                        <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                            <span class="text-slate-500 block text-[11px]">Do thiên tai</span>
+                            <span id="stat-cq-thien-tai" class="font-bold text-slate-800 text-sm">0</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 bg-red-50 border border-red-100 rounded-lg p-2.5 flex justify-between items-center text-xs">
+                        <span class="text-red-700 font-medium flex items-center gap-1.5">
+                            <i class="fa-solid fa-triangle-exclamation text-red-500"></i> Đã báo nguy cơ cao
+                        </span>
+                        <span id="stat-cq-nguy-co-cao" class="font-extrabold text-red-700 text-sm">0</span>
+                    </div>
+                </div>
+
+                <!-- 2. Sự cố Thiết bị Truyền dẫn -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+                                <i class="fa-solid fa-server text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-800">Thiết Bị Truyền Dẫn</h3>
+                                <p class="text-[11px] text-slate-500">Tổng số sự cố ghi nhận</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline justify-between mt-2 pt-3 border-t border-slate-100">
+                        <span class="text-xs text-slate-500 font-medium">Tổng sự cố</span>
+                        <span id="stat-truyen-dan" class="text-3xl font-extrabold text-blue-600">0</span>
+                    </div>
+                </div>
+
+                <!-- 3. Sự cố Thiết bị CMIP -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-50 border border-cyan-100 flex items-center justify-center text-cyan-600">
+                                <i class="fa-solid fa-microchip text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-800">Thiết Bị CMIP</h3>
+                                <p class="text-[11px] text-slate-500">Mạng chuyển mạch & IP</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline justify-between mt-2 pt-3 border-t border-slate-100">
+                        <span class="text-xs text-slate-500 font-medium">Tổng sự cố</span>
+                        <span id="stat-cmip" class="text-3xl font-extrabold text-cyan-600">0</span>
+                    </div>
+                </div>
+
+                <!-- 4. Sự cố Nguồn điện -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
+                                <i class="fa-solid fa-bolt text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-800">Nguồn Điện</h3>
+                                <p class="text-[11px] text-slate-500">Máy phát, Acquy, Lưới điện</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline justify-between mt-2 pt-3 border-t border-slate-100">
+                        <span class="text-xs text-slate-500 font-medium">Tổng sự cố</span>
+                        <span id="stat-nguon-dien" class="text-3xl font-extrabold text-amber-600">0</span>
+                    </div>
+                </div>
+
+                <!-- 5. Sự cố Điều hòa -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-center text-teal-600">
+                                <i class="fa-solid fa-snowflake text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-800">Điều Hòa Nhiệt Độ</h3>
+                                <p class="text-[11px] text-slate-500">Hệ thống làm mát trạm VT</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline justify-between mt-2 pt-3 border-t border-slate-100">
+                        <span class="text-xs text-slate-500 font-medium">Tổng sự cố</span>
+                        <span id="stat-dieu-hoa" class="text-3xl font-extrabold text-teal-600">0</span>
+                    </div>
+                </div>
+
+                <!-- 6. Phiên truyền hình -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600">
+                                <i class="fa-solid fa-tv text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-800">Truyền Hình</h3>
+                                <p class="text-[11px] text-slate-500">Các phiên truyền hình hội nghị</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline justify-between mt-2 pt-3 border-t border-slate-100">
+                        <span class="text-xs text-slate-500 font-medium">Tổng các phiên</span>
+                        <span id="stat-truyen-hinh" class="text-3xl font-extrabold text-purple-600">0</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Tổng hợp tiến độ chung -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+                <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-line text-blue-600"></i> Báo Cáo Tổng Quan Tiến Độ Công Việc Tuần
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div class="p-4 rounded-xl bg-blue-50/50 border border-blue-100">
+                        <p class="text-xs text-slate-500 mb-1">Tổng CV thực hiện</p>
+                        <p id="dash-total-work" class="text-2xl font-black text-blue-700">0</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-green-50/50 border border-green-100">
+                        <p class="text-xs text-slate-500 mb-1">Đã hoàn thành</p>
+                        <p id="dash-completed-work" class="text-2xl font-black text-green-600">0</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-amber-50/50 border border-amber-100">
+                        <p class="text-xs text-slate-500 mb-1">Đang thực hiện</p>
+                        <p id="dash-ongoing-work" class="text-2xl font-black text-amber-600">0</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-red-50/50 border border-red-100">
+                        <p class="text-xs text-slate-500 mb-1">Quá hạn / Chậm tiến độ</p>
+                        <p id="dash-overdue-work" class="text-2xl font-black text-red-600">0</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SECTION 1: CÔNG VIỆC THỰC HIỆN TRONG TUẦN -->
+        <section id="tab-thuc-hien" class="space-y-6 hidden">
+            <!-- Form Nhập/Thêm Công Việc -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-base font-bold text-slate-700 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-plus-circle text-blue-600"></i> Cập Nhật Tiến Độ Công Việc & Sự Cố
+                </h2>
+                
+                <form id="form-work" onsubmit="addWorkReport(event)" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Tuần <span class="text-red-500">*</span></label>
+                        <input type="week" id="work-week" required class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Lĩnh vực <span class="text-red-500">*</span></label>
+                        <select id="work-field" required onchange="toggleOpticalSubtypes()" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="">-- Chọn lĩnh vực --</option>
+                            <option value="Vô tuyến">Vô tuyến</option>
+                            <option value="CMIP">CMIP</option>
+                            <option value="Truyền dẫn">Truyền dẫn</option>
+                            <option value="Cáp quang">Cáp quang</option>
+                            <option value="Truyền hình">Truyền hình</option>
+                            <option value="Nguồn điện">Nguồn điện</option>
+                            <option value="Điều hòa">Điều hòa</option>
+                        </select>
+                    </div>
+
+                    <!-- Trường chọn phân loại chi tiết cho Cáp quang (Tự động ẩn/hiện) -->
+                    <div id="container-optical-subtype" class="hidden">
+                        <label class="block text-xs font-semibold text-indigo-700 mb-1">Phân loại sự cố Cáp quang</label>
+                        <select id="work-optical-subtype" class="w-full border border-indigo-200 bg-indigo-50/50 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <option value="Suy hao / Đứt sợi">Suy hao / Đứt sợi</option>
+                            <option value="Do chủ quan">Do chủ quan</option>
+                            <option value="Chưa hoàn thành trách nhiệm">Chưa hoàn thành trách nhiệm</option>
+                            <option value="Do thiên tai">Do thiên tai</option>
+                            <option value="Đã báo nguy cơ cao">Đã báo nguy cơ cao</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Số văn bản</label>
+                        <input type="text" id="work-doc-num" placeholder="VD: 123/CV-VNPT" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Hạn hoàn thành <span class="text-red-500">*</span></label>
+                        <input type="date" id="work-deadline" required onchange="calculateStatus()" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nội dung công việc <span class="text-red-500">*</span></label>
+                        <input type="text" id="work-content" placeholder="Nhập chi tiết nội dung công việc/sự cố..." required class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Trạng thái tiến độ <span class="text-red-500">*</span></label>
+                        <select id="work-progress" required onchange="calculateStatus()" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="Đang thực hiện">Đang thực hiện</option>
+                            <option value="Đã hoàn thành">Đã hoàn thành</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Ngày cập nhật/Hoàn thành</label>
+                        <input type="date" id="work-completed-date" onchange="calculateStatus()" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Kết quả thực hiện (Tự động)</label>
+                        <input type="text" id="work-result" readonly placeholder="Tự động đánh giá..." class="w-full bg-slate-100 font-bold border border-slate-300 rounded-lg p-2 text-sm outline-none">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nguyên nhân chậm tiến độ (nếu có)</label>
+                        <input type="text" id="work-reason" placeholder="Nêu lý do nếu quá hạn/chậm..." class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Đính kèm văn bản</label>
+                        <input type="file" id="work-file" class="w-full text-xs text-slate-500 file:mr-2 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                    </div>
+
+                    <div class="md:col-span-3 lg:col-span-4 flex justify-end gap-2 mt-2">
+                        <button type="reset" class="px-4 py-2 text-xs bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 font-medium">Làm mới</button>
+                        <button type="submit" class="px-5 py-2 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium flex items-center gap-2">
+                            <i class="fa-solid fa-save"></i> Lưu Báo Cáo
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Bảng hiển thị danh sách -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-700 text-sm">Danh Sách Báo Cáo Công Việc & Sự Cố Tuần</h3>
+                    <span class="text-xs text-slate-500">Cập nhật thời gian thực</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-600" id="table-work-reports">
+                        <thead class="bg-slate-100 text-slate-700 uppercase font-semibold border-b">
+                            <tr>
+                                <th class="p-3">Lĩnh vực</th>
+                                <th class="p-3">Phân loại chi tiết</th>
+                                <th class="p-3">Số văn bản</th>
+                                <th class="p-3 w-1/4">Nội dung</th>
+                                <th class="p-3">Hạn hoàn thành</th>
+                                <th class="p-3">Tiến độ</th>
+                                <th class="p-3">Kết quả</th>
+                                <th class="p-3">Nguyên nhân chậm</th>
+                                <th class="p-3 text-center">Tệp đính kèm</th>
+                                <th class="p-3 text-center">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="work-table-body" class="divide-y divide-slate-200">
+                            <!-- Dữ liệu sẽ được chèn qua Javascript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: DỰ KIẾN KẾ HOẠCH TUẦN TỚI -->
+        <section id="tab-ke-hoach" class="space-y-6 hidden">
+            <!-- Form Lập Kế Hoạch Tuần Tới -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-base font-bold text-slate-700 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-plus text-green-600"></i> Thêm Kế Hoạch Tuần Tới
+                </h2>
+                
+                <form id="form-plan" onsubmit="addPlanReport(event)" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Tuần tới <span class="text-red-500">*</span></label>
+                        <input type="week" id="plan-week" required class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Lĩnh vực <span class="text-red-500">*</span></label>
+                        <select id="plan-field" required class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
+                            <option value="">-- Chọn lĩnh vực --</option>
+                            <option value="Vô tuyến">Vô tuyến</option>
+                            <option value="CMIP">CMIP</option>
+                            <option value="Truyền dẫn">Truyền dẫn</option>
+                            <option value="Cáp quang">Cáp quang</option>
+                            <option value="Truyền hình">Truyền hình</option>
+                            <option value="Nguồn điện">Nguồn điện</option>
+                            <option value="Điều hòa">Điều hòa</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Số văn bản liên quan</label>
+                        <input type="text" id="plan-doc-num" placeholder="VD: 88/TB-VNPT" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Hạn hoàn thành dự kiến <span class="text-red-500">*</span></label>
+                        <input type="date" id="plan-deadline" required class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none">
+                    </div>
+
+                    <div class="md:col-span-4">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Nội dung kế hoạch <span class="text-red-500">*</span></label>
+                        <textarea id="plan-content" rows="2" placeholder="Mô tả chi tiết kế hoạch nhiệm vụ tuần tới..." required class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-green-500 outline-none"></textarea>
+                    </div>
+
+                    <div class="md:col-span-4 flex justify-end gap-2">
+                        <button type="submit" class="px-5 py-2 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Thêm Vào Kế Hoạch
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Bảng danh sách kế hoạch dự kiến -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-700 text-sm">Kế Hoạch Bắt Buộc/Dự Kiến Cho Tuần Tiếp Theo</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-600" id="table-plan-reports">
+                        <thead class="bg-slate-100 text-slate-700 uppercase font-semibold border-b">
+                            <tr>
+                                <th class="p-3 text-center">STT</th>
+                                <th class="p-3">Lĩnh vực</th>
+                                <th class="p-3">Số văn bản</th>
+                                <th class="p-3 w-1/2">Nội dung công việc dự kiến</th>
+                                <th class="p-3">Hạn hoàn thành dự kiến</th>
+                                <th class="p-3 text-center">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plan-table-body" class="divide-y divide-slate-200">
+                            <!-- Dữ liệu kế hoạch chèn qua JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JavaScript Logic xử lý ứng dụng -->
+    <script>
+        // DÁN LINK GOOGLE APPS SCRIPT CỦA BẠN VÀO ĐÂY
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3W7cbE0KEADvEFBtXA_Xlwx1yQxiSPbmee-YkiuUd1ZECCBaDWJVSA4aP4o77bEYX/exec";
+
+// Danh sách tài khoản đăng nhập hợp lệ
+const VALID_USERS = {
+    "baocaotuan": "Dainan@123",
+    "tvkhoa": "Adm@123",
+    "nhmai": "Adm@123",
+    "nhquang": "Adm@123",
+    "btdat": "Adm@123",
+    "tkt": "Adm@123"
+};
+
+// Khởi tạo dữ liệu mẫu nếu chưa fetch từ Sheets
+let workData = [
+    { id: 1, field: 'Cáp quang', subtype: 'Suy hao / Đứt sợi', docNum: '101/CV-TKN', content: 'Xử lý đứt cáp quang tuyến Vinh - Cửa Lò', deadline: '2026-09-08', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' },
+    { id: 2, field: 'Cáp quang', subtype: 'Đã báo nguy cơ cao', docNum: '102/CV-TKN', content: 'Phát hiện tuyến cáp QL1A nguy cơ bị va quệt do thi công đường', deadline: '2026-09-12', progress: 'Đang thực hiện', result: 'Đang thực hiện', reason: '-', file: '' },
+    { id: 3, field: 'Truyền dẫn', subtype: '', docNum: '105/CV-TKN', content: 'Cảnh báo mất nguồn quạt máy trạm Ring 10G', deadline: '2026-09-09', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' },
+    { id: 4, field: 'CMIP', subtype: '', docNum: '108/CV-TKN', content: 'Xử lý treo cổng switch core trung tâm', deadline: '2026-09-10', progress: 'Đang thực hiện', result: 'Đang thực hiện', reason: '-', file: '' },
+    { id: 5, field: 'Nguồn điện', subtype: '', docNum: '110/CV-TKN', content: 'Sự cố mất điện lưới trạm BTS Nam Đàn, đã chạy máy phát', deadline: '2026-09-07', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' },
+    { id: 6, field: 'Điều hòa', subtype: '', docNum: '112/CV-TKN', content: 'Sự cố hỏng lốc máy lạnh trạm Host Quỳ Hợp', deadline: '2026-09-11', progress: 'Đang thực hiện', result: 'Quá hạn', reason: 'Chờ linh kiện thay thế', file: '' },
+    { id: 7, field: 'Truyền hình', subtype: '', docNum: '115/CV-TKN', content: 'Đảm bảo phiên truyền hình hội nghị UBND Tỉnh', deadline: '2026-09-09', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' }
+];
+
+let planData = [
+    { id: 1, field: 'Cáp quang', docNum: '120/TB-VT', content: 'Nâng cấp bảo dưỡng tuyến cáp Ring 2', deadline: '2026-09-20' },
+    { id: 2, field: 'Truyền hình', docNum: '121/TB-VT', content: 'Phục vụ phiên truyền hình trực tiếp Đại hội Tỉnh', deadline: '2026-09-18' }
+];
+
+// Tải dữ liệu từ Google Sheets về trang web
+async function loadDataFromGoogleSheets() {
+    try {
+        const resWork = await fetch(`${SCRIPT_URL}?action=getWork`);
+        if(resWork.ok) {
+            const fetchedWork = await resWork.json();
+            if(Array.isArray(fetchedWork) && fetchedWork.length > 0) workData = fetchedWork;
+        }
+
+        const resPlan = await fetch(`${SCRIPT_URL}?action=getPlan`);
+        if(resPlan.ok) {
+            const fetchedPlan = await resPlan.json();
+            if(Array.isArray(fetchedPlan) && fetchedPlan.length > 0) planData = fetchedPlan;
+        }
+
+        updateDashboard();
+        renderWorkTable();
+        renderPlanTable();
+    } catch (error) {
+        console.warn("Đang sử dụng dữ liệu offline / chưa kết nối Google Sheets:", error);
+        updateDashboard();
+        renderWorkTable();
+        renderPlanTable();
+    }
+}
+
+// Xử lý Đăng Nhập
+function handleLogin(event) {
+    event.preventDefault();
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value;
+    const errorEl = document.getElementById('login-error');
+
+    if (VALID_USERS[user] && VALID_USERS[user] === pass) {
+        errorEl.classList.add('hidden');
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('main-app').classList.remove('hidden');
+        document.getElementById('current-user-display').innerText = user;
+        
+        document.getElementById('work-week').value = "2026-W37";
+        document.getElementById('plan-week').value = "2026-W38";
+
+        loadDataFromGoogleSheets();
+    } else {
+        errorEl.classList.remove('hidden');
+    }
+}
+
+// Xử lý Đăng Xuất
+function handleLogout() {
+    document.getElementById('login-screen').classList.remove('hidden');
+    document.getElementById('main-app').classList.add('hidden');
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+}
+
+// Chuyển Tab Navigation
+function switchTab(tabId) {
+    document.getElementById('tab-dashboard').classList.add('hidden');
+    document.getElementById('tab-thuc-hien').classList.add('hidden');
+    document.getElementById('tab-ke-hoach').classList.add('hidden');
+    
+    document.getElementById('btn-tab-dashboard').className = 'pb-3 px-4 font-semibold text-slate-500 hover:text-blue-600 transition-all flex items-center gap-2 whitespace-nowrap';
+    document.getElementById('btn-tab-thuc-hien').className = 'pb-3 px-4 font-semibold text-slate-500 hover:text-blue-600 transition-all flex items-center gap-2 whitespace-nowrap';
+    document.getElementById('btn-tab-ke-hoach').className = 'pb-3 px-4 font-semibold text-slate-500 hover:text-blue-600 transition-all flex items-center gap-2 whitespace-nowrap';
+
+    document.getElementById(tabId).classList.remove('hidden');
+
+    if (tabId === 'tab-dashboard') {
+        document.getElementById('btn-tab-dashboard').className = 'pb-3 px-4 font-semibold text-blue-600 border-b-2 border-blue-600 transition-all flex items-center gap-2 whitespace-nowrap';
+        updateDashboard();
+    } else if (tabId === 'tab-thuc-hien') {
+        document.getElementById('btn-tab-thuc-hien').className = 'pb-3 px-4 font-semibold text-blue-600 border-b-2 border-blue-600 transition-all flex items-center gap-2 whitespace-nowrap';
+    } else {
+        document.getElementById('btn-tab-ke-hoach').className = 'pb-3 px-4 font-semibold text-green-600 border-b-2 border-green-600 transition-all flex items-center gap-2 whitespace-nowrap';
+    }
+}
+
+// Cập nhật trường chọn phân loại Cáp quang khi chọn Lĩnh vực
+function toggleOpticalSubtypes() {
+    const field = document.getElementById('work-field').value;
+    const container = document.getElementById('container-optical-subtype');
+    if (field === 'Cáp quang') {
+        container.classList.remove('hidden');
+    } else {
+        container.classList.add('hidden');
+    }
+}
+
+// Tự động tính toán "Kết quả thực hiện"
+function calculateStatus() {
+    const deadlineVal = document.getElementById('work-deadline').value;
+    const progressVal = document.getElementById('work-progress').value;
+    const completedVal = document.getElementById('work-completed-date').value;
+    const resultInput = document.getElementById('work-result');
+
+    if (!deadlineVal) {
+        resultInput.value = '';
+        resultInput.className = 'w-full bg-slate-100 font-bold border border-slate-300 rounded-lg p-2 text-sm outline-none';
+        return;
+    }
+
+    const deadlineDate = new Date(deadlineVal);
+    const compareDate = completedVal ? new Date(completedVal) : new Date();
+
+    deadlineDate.setHours(0,0,0,0);
+    compareDate.setHours(0,0,0,0);
+
+    if (progressVal === 'Đã hoàn thành') {
+        if (completedVal && new Date(completedVal) > deadlineDate) {
+            resultInput.value = 'Hoàn thành (Quá hạn)';
+            resultInput.className = 'w-full bg-orange-100 text-orange-700 font-bold border border-orange-300 rounded-lg p-2 text-sm outline-none';
+        } else {
+            resultInput.value = 'Đã hoàn thành';
+            resultInput.className = 'w-full bg-green-100 text-green-700 font-bold border border-green-300 rounded-lg p-2 text-sm outline-none';
+        }
+    } else if (progressVal === 'Đang thực hiện') {
+        if (compareDate > deadlineDate) {
+            resultInput.value = 'Quá hạn';
+            resultInput.className = 'w-full bg-red-100 text-red-700 font-bold border border-red-300 rounded-lg p-2 text-sm outline-none';
+        } else {
+            resultInput.value = 'Đang thực hiện';
+            resultInput.className = 'w-full bg-yellow-100 text-yellow-700 font-bold border border-yellow-300 rounded-lg p-2 text-sm outline-none';
+        }
+    }
+}
+
+// Tính toán & Cập nhật Dashboard Thống Kê
+function updateDashboard() {
+    // Chỉ số Cáp quang
+    const capQuangList = workData.filter(i => i.field === 'Cáp quang');
+    document.getElementById('stat-cap-quang-total').innerText = capQuangList.length;
+
+    let cqChuQuan = 0, cqTrachNhiem = 0, cqSuyHao = 0, cqThienTai = 0, cqNguyCoCao = 0;
+    
+    capQuangList.forEach(item => {
+        const sub = item.subtype || '';
+        const content = item.content || '';
+        
+        if (sub === 'Do chủ quan' || content.toLowerCase().includes('chủ quan')) cqChuQuan++;
+        if (sub === 'Chưa hoàn thành trách nhiệm' || content.toLowerCase().includes('trách nhiệm')) cqTrachNhiem++;
+        if (sub === 'Suy hao / Đứt sợi' || content.toLowerCase().includes('suy hao') || content.toLowerCase().includes('đứt')) cqSuyHao++;
+        if (sub === 'Do thiên tai' || content.toLowerCase().includes('thiên tai') || content.toLowerCase().includes('mưa bão')) cqThienTai++;
+        if (sub === 'Đã báo nguy cơ cao' || content.toLowerCase().includes('nguy cơ')) cqNguyCoCao++;
+    });
+
+    document.getElementById('stat-cq-chu-quan').innerText = cqChuQuan;
+    document.getElementById('stat-cq-trach-nhiem').innerText = cqTrachNhiem;
+    document.getElementById('stat-cq-suy-hao').innerText = cqSuyHao;
+    document.getElementById('stat-cq-thien-tai').innerText = cqThienTai;
+    document.getElementById('stat-cq-nguy-co-cao').innerText = cqNguyCoCao;
+
+    // Các chỉ số kỹ thuật khác
+    document.getElementById('stat-truyen-dan').innerText = workData.filter(i => i.field === 'Truyền dẫn').length;
+    document.getElementById('stat-cmip').innerText = workData.filter(i => i.field === 'CMIP').length;
+    document.getElementById('stat-nguon-dien').innerText = workData.filter(i => i.field === 'Nguồn điện').length;
+    document.getElementById('stat-dieu-hoa').innerText = workData.filter(i => i.field === 'Điều hòa').length;
+    document.getElementById('stat-truyen-hinh').innerText = workData.filter(i => i.field === 'Truyền hình').length;
+
+    // Thống kê chung tiến độ công việc
+    const totalWork = workData.length;
+    const completedWork = workData.filter(i => String(i.result).includes('Đã hoàn thành') || String(i.result).includes('Hoàn thành')).length;
+    const overdueWork = workData.filter(i => String(i.result).includes('Quá hạn')).length;
+    const ongoingWork = totalWork - completedWork - overdueWork;
+
+    document.getElementById('dash-total-work').innerText = totalWork;
+    document.getElementById('dash-completed-work').innerText = completedWork;
+    document.getElementById('dash-ongoing-work').innerText = ongoingWork;
+    document.getElementById('dash-overdue-work').innerText = overdueWork;
+}
+
+// Thêm Báo cáo công việc
+async function addWorkReport(event) {
+    event.preventDefault();
+    const fileInput = document.getElementById('work-file');
+    const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : '';
+    const fieldVal = document.getElementById('work-field').value;
+
+    const newItem = {
+        id: Date.now(),
+        field: fieldVal,
+        subtype: fieldVal === 'Cáp quang' ? document.getElementById('work-optical-subtype').value : '-',
+        docNum: document.getElementById('work-doc-num').value || '-',
+        content: document.getElementById('work-content').value,
+        deadline: document.getElementById('work-deadline').value,
+        progress: document.getElementById('work-progress').value,
+        result: document.getElementById('work-result').value || 'Đang thực hiện',
+        reason: document.getElementById('work-reason').value || '-',
+        file: fileName
+    };
+
+    workData.unshift(newItem);
+    renderWorkTable();
+    updateDashboard();
+
+    document.getElementById('form-work').reset();
+    document.getElementById('work-week').value = "2026-W37";
+    document.getElementById('container-optical-subtype').classList.add('hidden');
+
+    // Gửi lên Google Sheets
+    try {
+        await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'addWork', data: newItem })
+        });
+    } catch(e) { console.error("Error saving to sheet:", e); }
+}
+
+// Render Bảng báo cáo công việc
+function renderWorkTable() {
+    const tbody = document.getElementById('work-table-body');
+    if(!tbody) return;
+
+    tbody.innerHTML = workData.map(item => {
+        let resultBadge = '';
+        if (String(item.result).includes('Đã hoàn thành')) {
+            resultBadge = `<span class="bg-green-100 text-green-700 font-bold px-2 py-1 rounded-md text-[11px]">${item.result}</span>`;
+        } else if (String(item.result).includes('Quá hạn')) {
+            resultBadge = `<span class="bg-red-100 text-red-700 font-bold px-2 py-1 rounded-md text-[11px]">${item.result}</span>`;
+        } else {
+            resultBadge = `<span class="bg-yellow-100 text-yellow-700 font-bold px-2 py-1 rounded-md text-[11px]">${item.result}</span>`;
+        }
+
+        return `
+            <tr class="hover:bg-slate-50">
+                <td class="p-3 font-semibold text-slate-800">${item.field}</td>
+                <td class="p-3 text-slate-600">${item.subtype || '-'}</td>
+                <td class="p-3">${item.docNum}</td>
+                <td class="p-3">${item.content}</td>
+                <td class="p-3">${item.deadline}</td>
+                <td class="p-3"><span class="bg-blue-50 text-blue-700 px-2 py-1 rounded-md text-[11px]">${item.progress}</span></td>
+                <td class="p-3">${resultBadge}</td>
+                <td class="p-3 text-red-600">${item.reason}</td>
+                <td class="p-3 text-center">
+                    ${item.file ? `<a href="#" title="${item.file}" class="text-blue-600 hover:text-blue-800"><i class="fa-solid fa-paperclip text-sm"></i></a>` : `<span class="text-slate-300">-</span>`}
+                </td>
+                <td class="p-3 text-center">
+                    <button onclick="deleteWork(${item.id})" class="text-slate-400 hover:text-red-600 transition-all"><i class="fa-solid fa-trash"></i></button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// Thêm kế hoạch tuần tới
+async function addPlanReport(event) {
+    event.preventDefault();
+    const newItem = {
+        id: Date.now(),
+        field: document.getElementById('plan-field').value,
+        docNum: document.getElementById('plan-doc-num').value || '-',
+        content: document.getElementById('plan-content').value,
+        deadline: document.getElementById('plan-deadline').value
+    };
+
+    planData.unshift(newItem);
+    renderPlanTable();
+    document.getElementById('form-plan').reset();
+    document.getElementById('plan-week').value = "2026-W38";
+
+    try {
+        await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'addPlan', data: newItem })
+        });
+    } catch(e) { console.error(e); }
+}
+
+// Render Bảng kế hoạch
+function renderPlanTable() {
+    const tbody = document.getElementById('plan-table-body');
+    if(!tbody) return;
+
+    tbody.innerHTML = planData.map((item, index) => `
+        <tr class="hover:bg-slate-50">
+            <td class="p-3 text-center">${index + 1}</td>
+            <td class="p-3 font-semibold text-slate-800">${item.field}</td>
+            <td class="p-3">${item.docNum}</td>
+            <td class="p-3">${item.content}</td>
+            <td class="p-3 text-blue-700 font-medium">${item.deadline}</td>
+            <td class="p-3 text-center">
+                <button onclick="deletePlan(${item.id})" class="text-slate-400 hover:text-red-600 transition-all"><i class="fa-solid fa-trash"></i></button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Xóa dòng dữ liệu
+async function deleteWork(id) {
+    workData = workData.filter(i => i.id !== id);
+    renderWorkTable();
+    updateDashboard();
+    await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'deleteWork', id: id })
+    });
+}
+
+async function deletePlan(id) {
+    planData = planData.filter(i => i.id !== id);
+    renderPlanTable();
+    await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'deletePlan', id: id })
+    });
+}
+
+// ================= NÚT XUẤT BÁO CÁO EXCEL =================
+function exportToExcel() {
+    const weekVal = document.getElementById('select-week-global').value || '2026-W37';
+    
+    // 1. Dữ liệu Sheet Dashboard Thống kê
+    const capQuangList = workData.filter(i => i.field === 'Cáp quang');
+    let cqChuQuan = 0, cqTrachNhiem = 0, cqSuyHao = 0, cqThienTai = 0, cqNguyCoCao = 0;
+    capQuangList.forEach(item => {
+        const sub = item.subtype || '';
+        const content = item.content || '';
+        if (sub === 'Do chủ quan' || content.toLowerCase().includes('chủ quan')) cqChuQuan++;
+        if (sub === 'Chưa hoàn thành trách nhiệm' || content.toLowerCase().includes('trách nhiệm')) cqTrachNhiem++;
+        if (sub === 'Suy hao / Đứt sợi' || content.toLowerCase().includes('suy hao') || content.toLowerCase().includes('đứt')) cqSuyHao++;
+        if (sub === 'Do thiên tai' || content.toLowerCase().includes('thiên tai')) cqThienTai++;
+        if (sub === 'Đã báo nguy cơ cao' || content.toLowerCase().includes('nguy cơ')) cqNguyCoCao++;
+    });
+
+    const summaryData = [
+        ["ĐÀI VIỄN THÔNG NGHỆ AN - BÁO CÁO THỐNG KÊ TUẦN", weekVal],
+        [""],
+        ["CHỈ TIÊU / HẠ TẦNG SỰ CỐ", "SỐ LƯỢNG SỰ CỐ / PHIÊN"],
+        ["Tổng sự cố Cáp quang", capQuangList.length],
+        ["  - Do chủ quan", cqChuQuan],
+        ["  - Do chưa hoàn thành trách nhiệm", cqTrachNhiem],
+        ["  - Do suy hao / đứt sợi", cqSuyHao],
+        ["  - Do thiên tai", cqThienTai],
+        ["  - Đã báo nguy cơ cao", cqNguyCoCao],
+        ["Tổng sự cố thiết bị truyền dẫn", workData.filter(i => i.field === 'Truyền dẫn').length],
+        ["Tổng sự cố thiết bị CMIP", workData.filter(i => i.field === 'CMIP').length],
+        ["Tổng sự cố nguồn điện", workData.filter(i => i.field === 'Nguồn điện').length],
+        ["Tổng sự cố điều hòa", workData.filter(i => i.field === 'Điều hòa').length],
+        ["Tổng các phiên truyền hình", workData.filter(i => i.field === 'Truyền hình').length],
+        [""],
+        ["TỔNG QUAN CÔNG VIỆC THỰC HIỆN"],
+        ["Tổng số công việc", workData.length],
+        ["Đã hoàn thành", workData.filter(i => String(i.result).includes('Hoàn thành')).length],
+        ["Đang thực hiện", workData.filter(i => String(i.result) === 'Đang thực hiện').length],
+        ["Quá hạn / Chậm tiến độ", workData.filter(i => String(i.result).includes('Quá hạn')).length]
+    ];
+
+    // 2. Dữ liệu Sheet Công việc thực hiện
+    const workExportData = [
+        ["STT", "Lĩnh Vực", "Phân Loại Chi Tiết", "Số Văn Bản", "Nội Dung Công Việc / Sự Cố", "Hạn Hoàn Thành", "Tiến Độ", "Kết Quả Thực Hiện", "Nguyên Nhân Chậm Tiến Độ"]
+    ];
+    workData.forEach((item, idx) => {
+        workExportData.push([
+            idx + 1,
+            item.field,
+            item.subtype || '-',
+            item.docNum || '-',
+            item.content,
+            item.deadline,
+            item.progress,
+            item.result,
+            item.reason || '-'
+        ]);
+    });
+
+    // 3. Dữ liệu Sheet Kế hoạch tuần tới
+    const planExportData = [
+        ["STT", "Lĩnh Vực", "Số Văn Bản Liên Quan", "Nội Dung Kế Hoạch Dự Kiến", "Hạn Hoàn Thành Dự Kiến"]
+    ];
+    planData.forEach((item, idx) => {
+        planExportData.push([
+            idx + 1,
+            item.field,
+            item.docNum || '-',
+            item.content,
+            item.deadline
+        ]);
+    });
+
+    // Tạo Workbook bằng SheetJS
+    const wb = XLSX.utils.book_new();
+
+    const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+    const wsWork = XLSX.utils.aoa_to_sheet(workExportData);
+    const wsPlan = XLSX.utils.aoa_to_sheet(planExportData);
+
+    // Chỉnh độ rộng cột
+    wsSummary['!cols'] = [{ wch: 35 }, { wch: 20 }];
+    wsWork['!cols'] = [{ wch: 6 }, { wch: 15 }, { wch: 25 }, { wch: 15 }, { wch: 45 }, { wch: 15 }, { wch: 15 }, { wch: 20 }, { wch: 30 }];
+    wsPlan['!cols'] = [{ wch: 6 }, { wch: 15 }, { wch: 20 }, { wch: 50 }, { wch: 22 }];
+
+    XLSX.utils.book_append_sheet(wb, wsSummary, "Dashboard Thống Kê");
+    XLSX.utils.book_append_sheet(wb, wsWork, "Cong_Viec_Tuan");
+    XLSX.utils.book_append_sheet(wb, wsPlan, "Ke_Hoach_Tuan_Toi");
+
+    // Tải xuống file Excel
+    XLSX.writeFile(wb, `Bao_Cao_Cong_Viec_VNPT_${weekVal}.xlsx`);
+}
+
+    </script>
+</body>
+</html>
