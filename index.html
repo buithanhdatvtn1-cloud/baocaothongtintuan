@@ -673,18 +673,22 @@ function updateDashboard() {
     document.getElementById('stat-cap-quang-total').innerText = capQuangList.length;
 
     let cqChuQuan = 0, cqTrachNhiem = 0, cqSuyHao = 0, cqThienTai = 0, cqNguyCoCao = 0;
+    let cqKhachQuan = 0; // Thêm biến đếm Do khách quan
     
     capQuangList.forEach(item => {
         const sub = item.subtype || '';
-        const content = item.content || '';
         
-        if (sub === 'Do chủ quan' || content.toLowerCase().includes('chủ quan')) cqChuQuan++;
-        if (sub === 'Chưa hoàn thành trách nhiệm' || content.toLowerCase().includes('trách nhiệm')) cqTrachNhiem++;
-        if (sub === 'Suy hao / Đứt sợi' || content.toLowerCase().includes('suy hao') || content.toLowerCase().includes('đứt')) cqSuyHao++;
-        if (sub === 'Do thiên tai' || content.toLowerCase().includes('thiên tai') || content.toLowerCase().includes('mưa bão')) cqThienTai++;
-        if (sub === 'Đã báo nguy cơ cao' || content.toLowerCase().includes('nguy cơ')) cqNguyCoCao++;
+        // Ưu tiên kiểm tra giá trị đã chọn trong menu Phân loại (subtype)
+        if (sub === 'Do chủ quan') cqChuQuan++;
+        else if (sub === 'Chưa hoàn thành trách nhiệm') cqTrachNhiem++;
+        else if (sub === 'Suy hao / Đứt sợi') cqSuyHao++;
+        else if (sub === 'Do thiên tai') cqThienTai++;
+        else if (sub === 'Do khách quan') cqKhachQuan++;
+        else if (sub === 'Đã báo nguy cơ cao') cqNguyCoCao++;
     });
 
+    // Cập nhật giá trị hiển thị lên giao diện Dashboard
+    document.getElementById('stat-cq-khach-quan').innerText = cqKhachQuan;
     document.getElementById('stat-cq-chu-quan').innerText = cqChuQuan;
     document.getElementById('stat-cq-trach-nhiem').innerText = cqTrachNhiem;
     document.getElementById('stat-cq-suy-hao').innerText = cqSuyHao;
