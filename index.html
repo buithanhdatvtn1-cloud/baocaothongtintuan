@@ -530,7 +530,6 @@
                     <input type="text" id="edit-work-doc-num" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
 
-                <!-- Đã chỉnh sửa: Thay thế Hạn hoàn thành bằng Ngày hoàn thành -->
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1">Ngày hoàn thành</label>
                     <input type="date" id="edit-work-completed-date" onchange="calculateEditStatus()" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
@@ -572,6 +571,24 @@
     <!-- JavaScript Logic xử lý ứng dụng -->
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxC73WI8g5sMzXFW6lbq36bUthTC5tKxv8TG_eFtHt1ABn1tQ3wmZdVIbtzc6KJ8YnO/exec";
+
+        let currentVersion = "0";
+
+        // 🟢 CẬP NHẬT PHẦN 2: Hàm kiểm tra phiên bản dữ liệu realtime
+        async function checkDataVersion() {
+            try {
+                const res = await fetch(`${SCRIPT_URL}?action=getVersion`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.version && data.version !== currentVersion) {
+                        currentVersion = data.version;
+                        await loadDataFromGoogleSheets();
+                    }
+                }
+            } catch (e) {
+                console.warn("Kiểm tra phiên bản thất bại:", e);
+            }
+        }
 
         const VALID_USERS = {
             "baocaotuan": "Dainan@123",
@@ -622,6 +639,7 @@
             }
         }
 
+        // 🟢 CẬP NHẬT PHẦN 2: Kích hoạt đồng bộ thời gian thực khi đăng nhập thành công
         function handleLogin(event) {
             event.preventDefault();
             const user = document.getElementById('username').value.trim();
@@ -639,6 +657,9 @@
 
                 switchTab('tab-dashboard');
                 loadDataFromGoogleSheets();
+
+                // Kiểm tra thay đổi dữ liệu từ các máy khác mỗi 1.5 giây
+                setInterval(checkDataVersion, 1500);
             } else {
                 errorEl.classList.remove('hidden');
             }
@@ -722,7 +743,6 @@
             }
         }
 
-        /* Đã sửa: Tính toán trạng thái khi sửa đổi ngày hoàn thành trong Modal */
         function calculateEditStatus() {
             const id = Number(document.getElementById('edit-work-id').value);
             const currentItem = workData.find(i => i.id === id);
@@ -753,7 +773,6 @@
             }
         }
 
-        /* Đã sửa: Cập nhật chính xác số liệu Dashboard & Sự cố Cáp Quang */
         function updateDashboard() {
             const capQuangList = workData.filter(i => i.field === 'Cáp quang');
             document.getElementById('stat-cap-quang-total').innerText = capQuangList.length;
@@ -771,7 +790,6 @@
                 else if (item.subtype === 'Đã báo nguy cơ cao' || sub.includes('nguy cơ') || text.includes('nguy cơ')) cqNguyCoCao++;
                 else if (item.subtype === 'Do khách quan' || sub.includes('khách quan') || text.includes('khách quan')) cqKhachQuan++;
                 else {
-                    // Mặc định phân loại nếu chưa gắn nhãn cụ thể
                     cqSuyHao++;
                 }
             });
@@ -789,7 +807,6 @@
             document.getElementById('stat-dieu-hoa').innerText = workData.filter(i => i.field === 'Điều hòa').length;
             document.getElementById('stat-truyen-hinh').innerText = workData.filter(i => i.field === 'Truyền hình').length;
 
-            // Thống kê tiến độ công việc tổng hợp
             const totalWork = workData.length;
             const completedWork = workData.filter(i => String(i.result).includes('hoàn thành') || String(i.result).includes('Hoàn thành')).length;
             const overdueWork = workData.filter(i => String(i.result).includes('Quá hạn') || String(i.result).includes('quá hạn')).length;
@@ -834,6 +851,7 @@
                     method: 'POST',
                     body: JSON.stringify({ action: 'addWork', data: newItem })
                 });
+                checkDataVersion();
             } catch(e) { console.error("Error saving to sheet:", e); }
         }
 
@@ -877,7 +895,6 @@
             }).join('');
         }
 
-        /* --- XỬ LÝ SỬA BÁO CÁO CÔNG VIỆC --- */
         function openEditWorkModal(id) {
             const item = workData.find(i => i.id === id);
             if (!item) return;
@@ -903,6 +920,7 @@
             document.getElementById('edit-work-modal').classList.add('hidden');
         }
 
+        // 🟢 CẬP NHẬT PHẦN 2: Gọi checkDataVersion ngay sau khi lưu chỉnh sửa thành công
         async function saveWorkEdit(event) {
             event.preventDefault();
             const id = Number(document.getElementById('edit-work-id').value);
@@ -932,6 +950,7 @@
                     method: 'POST',
                     body: JSON.stringify({ action: 'updateWork', data: updatedItem })
                 });
+                checkDataVersion();
             } catch(e) { console.error("Error updating sheet:", e); }
         }
 
@@ -955,6 +974,7 @@
                     method: 'POST',
                     body: JSON.stringify({ action: 'addPlan', data: newItem })
                 });
+                checkDataVersion();
             } catch(e) { console.error(e); }
         }
 
@@ -986,6 +1006,7 @@
                     method: 'POST',
                     body: JSON.stringify({ action: 'deleteWork', id: id })
                 });
+                checkDataVersion();
             } catch (e) { console.error(e); }
         }
 
@@ -998,6 +1019,7 @@
                     method: 'POST',
                     body: JSON.stringify({ action: 'deletePlan', id: id })
                 });
+                checkDataVersion();
             } catch (e) { console.error(e); }
         }
 
