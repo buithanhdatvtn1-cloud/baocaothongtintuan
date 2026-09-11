@@ -166,6 +166,10 @@
                             <span class="text-slate-500 block text-[11px]">Do khách quan</span>
                             <span id="stat-cq-khach-quan" class="font-bold text-slate-800 text-sm">0</span>
                         </div>
+                        <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                            <span class="text-slate-500 block text-[11px]">Thực hiện theo văn bản</span>
+                            <span id="stat-cq-theo-van-ban" class="font-bold text-slate-800 text-sm">0</span>
+                        </div>
                     </div>
 
                     <div class="mt-3 bg-red-50 border border-red-100 rounded-lg p-2.5 flex justify-between items-center text-xs">
@@ -328,6 +332,7 @@
                             <option value="Chưa hoàn thành trách nhiệm">Chưa hoàn thành trách nhiệm</option>
                             <option value="Do khách quan">Do khách quan</option>
                             <option value="Do thiên tai">Do thiên tai</option>
+                            <option value="Thực hiện theo văn bản">Thực hiện theo văn bản</option>
                             <option value="Đã báo nguy cơ cao">Đã báo nguy cơ cao</option>
                         </select>
                     </div>
@@ -521,6 +526,7 @@
                         <option value="Chưa hoàn thành trách nhiệm">Chưa hoàn thành trách nhiệm</option>
                         <option value="Do khách quan">Do khách quan</option>
                         <option value="Do thiên tai">Do thiên tai</option>
+                        <option value="Thực hiện theo văn bản">Thực hiện theo văn bản</option>
                         <option value="Đã báo nguy cơ cao">Đã báo nguy cơ cao</option>
                     </select>
                 </div>
@@ -574,7 +580,6 @@
 
         let currentVersion = "0";
 
-        // 🟢 CẬP NHẬT PHẦN 2: Hàm kiểm tra phiên bản dữ liệu realtime
         async function checkDataVersion() {
             try {
                 const res = await fetch(`${SCRIPT_URL}?action=getVersion`);
@@ -639,7 +644,6 @@
             }
         }
 
-        // 🟢 CẬP NHẬT PHẦN 2: Kích hoạt đồng bộ thời gian thực khi đăng nhập thành công
         function handleLogin(event) {
             event.preventDefault();
             const user = document.getElementById('username').value.trim();
@@ -658,7 +662,6 @@
                 switchTab('tab-dashboard');
                 loadDataFromGoogleSheets();
 
-                // Kiểm tra thay đổi dữ liệu từ các máy khác mỗi 1.5 giây
                 setInterval(checkDataVersion, 1500);
             } else {
                 errorEl.classList.remove('hidden');
@@ -777,7 +780,7 @@
             const capQuangList = workData.filter(i => i.field === 'Cáp quang');
             document.getElementById('stat-cap-quang-total').innerText = capQuangList.length;
 
-            let cqChuQuan = 0, cqTrachNhiem = 0, cqSuyHao = 0, cqThienTai = 0, cqNguyCoCao = 0, cqKhachQuan = 0;
+            let cqChuQuan = 0, cqTrachNhiem = 0, cqSuyHao = 0, cqThienTai = 0, cqNguyCoCao = 0, cqKhachQuan = 0, cqTheoVanBan = 0;
             
             capQuangList.forEach(item => {
                 const sub = (item.subtype || '').toLowerCase();
@@ -787,6 +790,7 @@
                 else if (item.subtype === 'Chưa hoàn thành trách nhiệm' || sub.includes('trách nhiệm') || text.includes('trách nhiệm')) cqTrachNhiem++;
                 else if (item.subtype === 'Suy hao / Đứt sợi' || sub.includes('suy hao') || sub.includes('đứt') || text.includes('suy hao') || text.includes('đứt')) cqSuyHao++;
                 else if (item.subtype === 'Do thiên tai' || sub.includes('thiên tai') || text.includes('thiên tai')) cqThienTai++;
+                else if (item.subtype === 'Thực hiện theo văn bản' || sub.includes('theo văn bản') || text.includes('theo văn bản')) cqTheoVanBan++;
                 else if (item.subtype === 'Đã báo nguy cơ cao' || sub.includes('nguy cơ') || text.includes('nguy cơ')) cqNguyCoCao++;
                 else if (item.subtype === 'Do khách quan' || sub.includes('khách quan') || text.includes('khách quan')) cqKhachQuan++;
                 else {
@@ -799,6 +803,7 @@
             document.getElementById('stat-cq-trach-nhiem').innerText = cqTrachNhiem;
             document.getElementById('stat-cq-suy-hao').innerText = cqSuyHao;
             document.getElementById('stat-cq-thien-tai').innerText = cqThienTai;
+            document.getElementById('stat-cq-theo-van-ban').innerText = cqTheoVanBan;
             document.getElementById('stat-cq-nguy-co-cao').innerText = cqNguyCoCao;
 
             document.getElementById('stat-truyen-dan').innerText = workData.filter(i => i.field === 'Truyền dẫn').length;
@@ -920,7 +925,6 @@
             document.getElementById('edit-work-modal').classList.add('hidden');
         }
 
-        // 🟢 CẬP NHẬT PHẦN 2: Gọi checkDataVersion ngay sau khi lưu chỉnh sửa thành công
         async function saveWorkEdit(event) {
             event.preventDefault();
             const id = Number(document.getElementById('edit-work-id').value);
@@ -1026,7 +1030,7 @@
         function exportToExcel() {
             const weekVal = document.getElementById('select-week-global').value || '2026-W37';
             const capQuangList = workData.filter(i => i.field === 'Cáp quang');
-            let cqChuQuan = 0, cqTrachNhiem = 0, cqSuyHao = 0, cqThienTai = 0, cqNguyCoCao = 0;
+            let cqChuQuan = 0, cqTrachNhiem = 0, cqSuyHao = 0, cqThienTai = 0, cqTheoVanBan = 0, cqNguyCoCao = 0;
             capQuangList.forEach(item => {
                 const sub = item.subtype || '';
                 const content = item.content || '';
@@ -1034,6 +1038,7 @@
                 if (sub === 'Chưa hoàn thành trách nhiệm' || content.toLowerCase().includes('trách nhiệm')) cqTrachNhiem++;
                 if (sub === 'Suy hao / Đứt sợi' || content.toLowerCase().includes('suy hao') || content.toLowerCase().includes('đứt')) cqSuyHao++;
                 if (sub === 'Do thiên tai' || content.toLowerCase().includes('thiên tai')) cqThienTai++;
+                if (sub === 'Thực hiện theo văn bản' || content.toLowerCase().includes('theo văn bản')) cqTheoVanBan++;
                 if (sub === 'Đã báo nguy cơ cao' || content.toLowerCase().includes('nguy cơ')) cqNguyCoCao++;
             });
 
@@ -1046,6 +1051,7 @@
                 ["  - Do chưa hoàn thành trách nhiệm", cqTrachNhiem],
                 ["  - Do suy hao / đứt sợi", cqSuyHao],
                 ["  - Do thiên tai", cqThienTai],
+                ["  - Thực hiện theo văn bản", cqTheoVanBan],
                 ["  - Đã báo nguy cơ cao", cqNguyCoCao],
                 ["Tổng sự cố thiết bị truyền dẫn", workData.filter(i => i.field === 'Truyền dẫn').length],
                 ["Tổng sự cố thiết bị CMIP", workData.filter(i => i.field === 'CMIP').length],
