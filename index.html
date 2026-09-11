@@ -64,7 +64,6 @@
                     <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập
                 </button>
 
-                <!-- Gợi ý tài khoản để test -->
                 <div class="pt-4 border-t border-slate-100 text-[11px] text-slate-500 space-y-1">
                     <p class="font-semibold text-slate-600">Danh sách tài khoản hệ thống:</p>
                     <p>• Users: <span class="font-mono text-blue-600">tvkhoa, nhmai, nhquang, tkt, tvt</span> (Mật khẩu: <span class="font-mono text-slate-700">Adm@123</span>)</p>
@@ -81,7 +80,6 @@
         <!-- Header VNPT -->
         <header class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-4">
-                <!-- Logo VNPT -->
                 <div class="bg-blue-50 p-2 rounded-lg border border-blue-100 flex items-center justify-center">
                     <svg class="w-10 h-8" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M10,20 Q40,5 75,30 Q90,40 85,60 Q80,75 50,75 Q20,75 15,50 Q10,35 30,25" stroke="#005BAA" stroke-width="12" fill="none" stroke-linecap="round"/>
@@ -96,14 +94,12 @@
                 </div>
             </div>
 
-            <!-- User Info & Global Actions -->
             <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-between md:justify-end">
                 <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200">
                     <label for="select-week-global" class="text-xs font-semibold text-slate-600">Tuần:</label>
                     <input type="week" id="select-week-global" class="bg-white border border-slate-300 text-slate-700 text-xs rounded p-1 focus:ring-2 focus:ring-blue-500 outline-none" value="2026-W37">
                 </div>
 
-                <!-- Nút xuất file Excel -->
                 <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs py-2 px-3.5 rounded-lg shadow-sm transition-all flex items-center gap-2">
                     <i class="fa-solid fa-file-excel text-sm"></i> Xuất Báo Cáo Excel
                 </button>
@@ -136,10 +132,9 @@
         <!-- ================= SECTION 0: DASHBOARD THỐNG KÊ ================= -->
         <section id="tab-dashboard" class="space-y-6">
             
-            <!-- Card Tổng quan các chỉ số kỹ thuật & sự cố -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 
-                <!-- 1. Sự cố Cáp Quang (Phức hợp) -->
+                <!-- 1. Sự cố Cáp Quang (Đã sửa lỗi đóng thẻ div) -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 col-span-1 md:col-span-2 lg:col-span-1 relative overflow-hidden">
                     <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
                         <div class="flex items-center gap-2.5">
@@ -175,6 +170,8 @@
                             <span class="text-slate-500 block text-[11px]">Do khách quan</span>
                             <span id="stat-cq-khach-quan" class="font-bold text-slate-800 text-sm">0</span>
                         </div>
+                    </div>
+
                     <div class="mt-3 bg-red-50 border border-red-100 rounded-lg p-2.5 flex justify-between items-center text-xs">
                         <span class="text-red-700 font-medium flex items-center gap-1.5">
                             <i class="fa-solid fa-triangle-exclamation text-red-500"></i> Đã báo nguy cơ cao
@@ -335,7 +332,7 @@
                         </select>
                     </div>
 
-                    <!-- Trường chọn phân loại chi tiết cho Cáp quang (Tự động ẩn/hiện) -->
+                    <!-- Trường chọn phân loại chi tiết cho Cáp quang -->
                     <div id="container-optical-subtype" class="hidden">
                         <label class="block text-xs font-semibold text-indigo-700 mb-1">Phân loại sự cố Cáp quang</label>
                         <select id="work-optical-subtype" class="w-full border border-indigo-200 bg-indigo-50/50 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
@@ -423,7 +420,6 @@
                             </tr>
                         </thead>
                         <tbody id="work-table-body" class="divide-y divide-slate-200">
-                            <!-- Dữ liệu sẽ được chèn qua Javascript -->
                         </tbody>
                     </table>
                 </div>
@@ -432,7 +428,6 @@
 
         <!-- SECTION 2: DỰ KIẾN KẾ HOẠCH TUẦN TỚI -->
         <section id="tab-ke-hoach" class="space-y-6 hidden">
-            <!-- Form Lập Kế Hoạch Tuần Tới -->
             <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                 <h2 class="text-base font-bold text-slate-700 mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-calendar-plus text-green-600"></i> Thêm Kế Hoạch Tuần Tới
@@ -481,7 +476,6 @@
                 </form>
             </div>
 
-            <!-- Bảng danh sách kế hoạch dự kiến -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="p-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
                     <h3 class="font-bold text-slate-700 text-sm">Kế Hoạch Bắt Buộc/Dự Kiến Cho Tuần Tiếp Theo</h3>
@@ -499,7 +493,6 @@
                             </tr>
                         </thead>
                         <tbody id="plan-table-body" class="divide-y divide-slate-200">
-                            <!-- Dữ liệu kế hoạch chèn qua JS -->
                         </tbody>
                     </table>
                 </div>
@@ -510,438 +503,421 @@
 
     <!-- JavaScript Logic xử lý ứng dụng -->
     <script>
-        // DÁN LINK GOOGLE APPS SCRIPT CỦA BẠN VÀO ĐÂY
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbycvEZ4sXp1cXN3zu3cCkgKE3P7g2M69cuPK50B3TWoqimXqxoM6KIVKNqn6Svn0ACy/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbycvEZ4sXp1cXN3zu3cCkgKE3P7g2M69cuPK50B3TWoqimXqxoM6KIVKNqn6Svn0ACy/exec";
 
-// Danh sách tài khoản đăng nhập hợp lệ
-const VALID_USERS = {
-    "baocaotuan": "Dainan@123",
-    "tvkhoa": "Adm@123",
-    "nhmai": "Adm@123",
-    "nhquang": "Adm@123",
-    "btdat": "Adm@123",
-    "tkt": "Adm@123"
-};
+        const VALID_USERS = {
+            "baocaotuan": "Dainan@123",
+            "tvkhoa": "Adm@123",
+            "nhmai": "Adm@123",
+            "nhquang": "Adm@123",
+            "btdat": "Adm@123",
+            "tkt": "Adm@123"
+        };
 
-// Khởi tạo dữ liệu mẫu nếu chưa fetch từ Sheets
-let workData = [
-    { id: 1, field: 'Cáp quang', subtype: 'Suy hao / Đứt sợi', docNum: '101/CV-TKN', content: 'Xử lý đứt cáp quang tuyến Vinh - Cửa Lò', deadline: '2026-09-08', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' },
-    { id: 2, field: 'Cáp quang', subtype: 'Đã báo nguy cơ cao', docNum: '102/CV-TKN', content: 'Phát hiện tuyến cáp QL1A nguy cơ bị va quệt do thi công đường', deadline: '2026-09-12', progress: 'Đang thực hiện', result: 'Đang thực hiện', reason: '-', file: '' },
-    { id: 3, field: 'Truyền dẫn', subtype: '', docNum: '105/CV-TKN', content: 'Cảnh báo mất nguồn quạt máy trạm Ring 10G', deadline: '2026-09-09', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' },
-    { id: 4, field: 'CMIP', subtype: '', docNum: '108/CV-TKN', content: 'Xử lý treo cổng switch core trung tâm', deadline: '2026-09-10', progress: 'Đang thực hiện', result: 'Đang thực hiện', reason: '-', file: '' },
-    { id: 5, field: 'Nguồn điện', subtype: '', docNum: '110/CV-TKN', content: 'Sự cố mất điện lưới trạm BTS Nam Đàn, đã chạy máy phát', deadline: '2026-09-07', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' },
-    { id: 6, field: 'Điều hòa', subtype: '', docNum: '112/CV-TKN', content: 'Sự cố hỏng lốc máy lạnh trạm Host Quỳ Hợp', deadline: '2026-09-11', progress: 'Đang thực hiện', result: 'Quá hạn', reason: 'Chờ linh kiện thay thế', file: '' },
-    { id: 7, field: 'Truyền hình', subtype: '', docNum: '115/CV-TKN', content: 'Đảm bảo phiên truyền hình hội nghị UBND Tỉnh', deadline: '2026-09-09', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' }
-];
+        const initialWorkData = [
+            { id: 1, field: 'Cáp quang', subtype: 'Suy hao / Đứt sợi', docNum: '101/CV-TKN', content: 'Xử lý đứt cáp quang tuyến Vinh - Cửa Lò', deadline: '2026-09-08', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' },
+            { id: 2, field: 'Cáp quang', subtype: 'Đã báo nguy cơ cao', docNum: '102/CV-TKN', content: 'Phát hiện tuyến cáp QL1A nguy cơ bị va quệt do thi công đường', deadline: '2026-09-12', progress: 'Đang thực hiện', result: 'Đang thực hiện', reason: '-', file: '' },
+            { id: 3, field: 'Truyền dẫn', subtype: '-', docNum: '105/CV-TKN', content: 'Cảnh báo mất nguồn quạt máy trạm Ring 10G', deadline: '2026-09-09', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' },
+            { id: 4, field: 'CMIP', subtype: '-', docNum: '108/CV-TKN', content: 'Xử lý treo cổng switch core trung tâm', deadline: '2026-09-10', progress: 'Đang thực hiện', result: 'Đang thực hiện', reason: '-', file: '' },
+            { id: 5, field: 'Nguồn điện', subtype: '-', docNum: '110/CV-TKN', content: 'Sự cố mất điện lưới trạm BTS Nam Đàn, đã chạy máy phát', deadline: '2026-09-07', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' },
+            { id: 6, field: 'Điều hòa', subtype: '-', docNum: '112/CV-TKN', content: 'Sự cố hỏng lốc máy lạnh trạm Host Quỳ Hợp', deadline: '2026-09-11', progress: 'Đang thực hiện', result: 'Quá hạn', reason: 'Chờ linh kiện thay thế', file: '' },
+            { id: 7, field: 'Truyền hình', subtype: '-', docNum: '115/CV-TKN', content: 'Đảm bảo phiên truyền hình hội nghị UBND Tỉnh', deadline: '2026-09-09', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' }
+        ];
 
-let planData = [
-    { id: 1, field: 'Cáp quang', docNum: '120/TB-VT', content: 'Nâng cấp bảo dưỡng tuyến cáp Ring 2', deadline: '2026-09-20' },
-    { id: 2, field: 'Truyền hình', docNum: '121/TB-VT', content: 'Phục vụ phiên truyền hình trực tiếp Đại hội Tỉnh', deadline: '2026-09-18' }
-];
+        const initialPlanData = [
+            { id: 1, field: 'Cáp quang', docNum: '120/TB-VT', content: 'Nâng cấp bảo dưỡng tuyến cáp Ring 2', deadline: '2026-09-20' },
+            { id: 2, field: 'Truyền hình', docNum: '121/TB-VT', content: 'Phục vụ phiên truyền hình trực tiếp Đại hội Tỉnh', deadline: '2026-09-18' }
+        ];
 
-// Tải dữ liệu từ Google Sheets về trang web
-async function loadDataFromGoogleSheets() {
-    try {
-        const resWork = await fetch(`${SCRIPT_URL}?action=getWork`);
-        if(resWork.ok) {
-            const fetchedWork = await resWork.json();
-            if(Array.isArray(fetchedWork) && fetchedWork.length > 0) workData = fetchedWork;
+        let workData = JSON.parse(JSON.stringify(initialWorkData));
+        let planData = JSON.parse(JSON.stringify(initialPlanData));
+
+        async function loadDataFromGoogleSheets() {
+            try {
+                const resWork = await fetch(`${SCRIPT_URL}?action=getWork`);
+                if(resWork.ok) {
+                    const fetchedWork = await resWork.json();
+                    if(Array.isArray(fetchedWork) && fetchedWork.length > 0) workData = fetchedWork;
+                }
+
+                const resPlan = await fetch(`${SCRIPT_URL}?action=getPlan`);
+                if(resPlan.ok) {
+                    const fetchedPlan = await resPlan.json();
+                    if(Array.isArray(fetchedPlan) && fetchedPlan.length > 0) planData = fetchedPlan;
+                }
+            } catch (error) {
+                console.warn("Đang sử dụng dữ liệu offline / chưa kết nối Google Sheets:", error);
+            } finally {
+                updateDashboard();
+                renderWorkTable();
+                renderPlanTable();
+            }
         }
 
-        const resPlan = await fetch(`${SCRIPT_URL}?action=getPlan`);
-        if(resPlan.ok) {
-            const fetchedPlan = await resPlan.json();
-            if(Array.isArray(fetchedPlan) && fetchedPlan.length > 0) planData = fetchedPlan;
+        function handleLogin(event) {
+            event.preventDefault();
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value;
+            const errorEl = document.getElementById('login-error');
+
+            if (VALID_USERS[user] && VALID_USERS[user] === pass) {
+                errorEl.classList.add('hidden');
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('main-app').classList.remove('hidden');
+                document.getElementById('current-user-display').innerText = user;
+                
+                document.getElementById('work-week').value = "2026-W37";
+                document.getElementById('plan-week').value = "2026-W38";
+
+                // Đảm bảo hiển thị tab Dashboard mặc định
+                switchTab('tab-dashboard');
+                
+                // Tải dữ liệu và render lại toàn bộ giao diện
+                loadDataFromGoogleSheets();
+            } else {
+                errorEl.classList.remove('hidden');
+            }
         }
 
-        updateDashboard();
-        renderWorkTable();
-        renderPlanTable();
-    } catch (error) {
-        console.warn("Đang sử dụng dữ liệu offline / chưa kết nối Google Sheets:", error);
-        updateDashboard();
-        renderWorkTable();
-        renderPlanTable();
-    }
-}
-
-// Xử lý Đăng Nhập
-function handleLogin(event) {
-    event.preventDefault();
-    const user = document.getElementById('username').value.trim();
-    const pass = document.getElementById('password').value;
-    const errorEl = document.getElementById('login-error');
-
-    if (VALID_USERS[user] && VALID_USERS[user] === pass) {
-        errorEl.classList.add('hidden');
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('main-app').classList.remove('hidden');
-        document.getElementById('current-user-display').innerText = user;
-        
-        document.getElementById('work-week').value = "2026-W37";
-        document.getElementById('plan-week').value = "2026-W38";
-
-        loadDataFromGoogleSheets();
-    } else {
-        errorEl.classList.remove('hidden');
-    }
-}
-
-// Xử lý Đăng Xuất
-function handleLogout() {
-    document.getElementById('login-screen').classList.remove('hidden');
-    document.getElementById('main-app').classList.add('hidden');
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
-}
-
-// Chuyển Tab Navigation
-function switchTab(tabId) {
-    document.getElementById('tab-dashboard').classList.add('hidden');
-    document.getElementById('tab-thuc-hien').classList.add('hidden');
-    document.getElementById('tab-ke-hoach').classList.add('hidden');
-    
-    document.getElementById('btn-tab-dashboard').className = 'pb-3 px-4 font-semibold text-slate-500 hover:text-blue-600 transition-all flex items-center gap-2 whitespace-nowrap';
-    document.getElementById('btn-tab-thuc-hien').className = 'pb-3 px-4 font-semibold text-slate-500 hover:text-blue-600 transition-all flex items-center gap-2 whitespace-nowrap';
-    document.getElementById('btn-tab-ke-hoach').className = 'pb-3 px-4 font-semibold text-slate-500 hover:text-blue-600 transition-all flex items-center gap-2 whitespace-nowrap';
-
-    document.getElementById(tabId).classList.remove('hidden');
-
-    if (tabId === 'tab-dashboard') {
-        document.getElementById('btn-tab-dashboard').className = 'pb-3 px-4 font-semibold text-blue-600 border-b-2 border-blue-600 transition-all flex items-center gap-2 whitespace-nowrap';
-        updateDashboard();
-    } else if (tabId === 'tab-thuc-hien') {
-        document.getElementById('btn-tab-thuc-hien').className = 'pb-3 px-4 font-semibold text-blue-600 border-b-2 border-blue-600 transition-all flex items-center gap-2 whitespace-nowrap';
-    } else {
-        document.getElementById('btn-tab-ke-hoach').className = 'pb-3 px-4 font-semibold text-green-600 border-b-2 border-green-600 transition-all flex items-center gap-2 whitespace-nowrap';
-    }
-}
-
-// Cập nhật trường chọn phân loại Cáp quang khi chọn Lĩnh vực
-function toggleOpticalSubtypes() {
-    const field = document.getElementById('work-field').value;
-    const container = document.getElementById('container-optical-subtype');
-    if (field === 'Cáp quang') {
-        container.classList.remove('hidden');
-    } else {
-        container.classList.add('hidden');
-    }
-}
-
-// Tự động tính toán "Kết quả thực hiện"
-function calculateStatus() {
-    const deadlineVal = document.getElementById('work-deadline').value;
-    const progressVal = document.getElementById('work-progress').value;
-    const completedVal = document.getElementById('work-completed-date').value;
-    const resultInput = document.getElementById('work-result');
-
-    if (!deadlineVal) {
-        resultInput.value = '';
-        resultInput.className = 'w-full bg-slate-100 font-bold border border-slate-300 rounded-lg p-2 text-sm outline-none';
-        return;
-    }
-
-    const deadlineDate = new Date(deadlineVal);
-    const compareDate = completedVal ? new Date(completedVal) : new Date();
-
-    deadlineDate.setHours(0,0,0,0);
-    compareDate.setHours(0,0,0,0);
-
-    if (progressVal === 'Đã hoàn thành') {
-        if (completedVal && new Date(completedVal) > deadlineDate) {
-            resultInput.value = 'Hoàn thành (Quá hạn)';
-            resultInput.className = 'w-full bg-orange-100 text-orange-700 font-bold border border-orange-300 rounded-lg p-2 text-sm outline-none';
-        } else {
-            resultInput.value = 'Đã hoàn thành';
-            resultInput.className = 'w-full bg-green-100 text-green-700 font-bold border border-green-300 rounded-lg p-2 text-sm outline-none';
-        }
-    } else if (progressVal === 'Đang thực hiện') {
-        if (compareDate > deadlineDate) {
-            resultInput.value = 'Quá hạn';
-            resultInput.className = 'w-full bg-red-100 text-red-700 font-bold border border-red-300 rounded-lg p-2 text-sm outline-none';
-        } else {
-            resultInput.value = 'Đang thực hiện';
-            resultInput.className = 'w-full bg-yellow-100 text-yellow-700 font-bold border border-yellow-300 rounded-lg p-2 text-sm outline-none';
-        }
-    }
-}
-
-// Tính toán & Cập nhật Dashboard Thống Kê
-function updateDashboard() {
-    // Chỉ số Cáp quang
-    const capQuangList = workData.filter(i => i.field === 'Cáp quang');
-    document.getElementById('stat-cap-quang-total').innerText = capQuangList.length;
-
-    let cqChuQuan = 0, cqTrachNhiem = 0, cqSuyHao = 0, cqThienTai = 0, cqNguyCoCao = 0;
-    let cqKhachQuan = 0; // Thêm biến đếm Do khách quan
-    
-    capQuangList.forEach(item => {
-        const sub = item.subtype || '';
-        
-        // Ưu tiên kiểm tra giá trị đã chọn trong menu Phân loại (subtype)
-        if (sub === 'Do chủ quan') cqChuQuan++;
-        else if (sub === 'Chưa hoàn thành trách nhiệm') cqTrachNhiem++;
-        else if (sub === 'Suy hao / Đứt sợi') cqSuyHao++;
-        else if (sub === 'Do thiên tai') cqThienTai++;
-        else if (sub === 'Do khách quan') cqKhachQuan++;
-        else if (sub === 'Đã báo nguy cơ cao') cqNguyCoCao++;
-    });
-
-    // Cập nhật giá trị hiển thị lên giao diện Dashboard
-    document.getElementById('stat-cq-khach-quan').innerText = cqKhachQuan;
-    document.getElementById('stat-cq-chu-quan').innerText = cqChuQuan;
-    document.getElementById('stat-cq-trach-nhiem').innerText = cqTrachNhiem;
-    document.getElementById('stat-cq-suy-hao').innerText = cqSuyHao;
-    document.getElementById('stat-cq-thien-tai').innerText = cqThienTai;
-    document.getElementById('stat-cq-nguy-co-cao').innerText = cqNguyCoCao;
-
-    // Các chỉ số kỹ thuật khác
-    document.getElementById('stat-truyen-dan').innerText = workData.filter(i => i.field === 'Truyền dẫn').length;
-    document.getElementById('stat-cmip').innerText = workData.filter(i => i.field === 'CMIP').length;
-    document.getElementById('stat-nguon-dien').innerText = workData.filter(i => i.field === 'Nguồn điện').length;
-    document.getElementById('stat-dieu-hoa').innerText = workData.filter(i => i.field === 'Điều hòa').length;
-    document.getElementById('stat-truyen-hinh').innerText = workData.filter(i => i.field === 'Truyền hình').length;
-
-    // Thống kê chung tiến độ công việc
-    const totalWork = workData.length;
-    const completedWork = workData.filter(i => String(i.result).includes('Đã hoàn thành') || String(i.result).includes('Hoàn thành')).length;
-    const overdueWork = workData.filter(i => String(i.result).includes('Quá hạn')).length;
-    const ongoingWork = totalWork - completedWork - overdueWork;
-
-    document.getElementById('dash-total-work').innerText = totalWork;
-    document.getElementById('dash-completed-work').innerText = completedWork;
-    document.getElementById('dash-ongoing-work').innerText = ongoingWork;
-    document.getElementById('dash-overdue-work').innerText = overdueWork;
-}
-
-// Thêm Báo cáo công việc
-async function addWorkReport(event) {
-    event.preventDefault();
-    const fileInput = document.getElementById('work-file');
-    const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : '';
-    const fieldVal = document.getElementById('work-field').value;
-
-    const newItem = {
-        id: Date.now(),
-        field: fieldVal,
-        subtype: fieldVal === 'Cáp quang' ? document.getElementById('work-optical-subtype').value : '-',
-        docNum: document.getElementById('work-doc-num').value || '-',
-        content: document.getElementById('work-content').value,
-        deadline: document.getElementById('work-deadline').value,
-        progress: document.getElementById('work-progress').value,
-        result: document.getElementById('work-result').value || 'Đang thực hiện',
-        reason: document.getElementById('work-reason').value || '-',
-        file: fileName
-    };
-
-    workData.unshift(newItem);
-    renderWorkTable();
-    updateDashboard();
-
-    document.getElementById('form-work').reset();
-    document.getElementById('work-week').value = "2026-W37";
-    document.getElementById('container-optical-subtype').classList.add('hidden');
-
-    // Gửi lên Google Sheets
-    try {
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({ action: 'addWork', data: newItem })
-        });
-    } catch(e) { console.error("Error saving to sheet:", e); }
-}
-
-// Render Bảng báo cáo công việc
-function renderWorkTable() {
-    const tbody = document.getElementById('work-table-body');
-    if(!tbody) return;
-
-    tbody.innerHTML = workData.map(item => {
-        let resultBadge = '';
-        if (String(item.result).includes('Đã hoàn thành')) {
-            resultBadge = `<span class="bg-green-100 text-green-700 font-bold px-2 py-1 rounded-md text-[11px]">${item.result}</span>`;
-        } else if (String(item.result).includes('Quá hạn')) {
-            resultBadge = `<span class="bg-red-100 text-red-700 font-bold px-2 py-1 rounded-md text-[11px]">${item.result}</span>`;
-        } else {
-            resultBadge = `<span class="bg-yellow-100 text-yellow-700 font-bold px-2 py-1 rounded-md text-[11px]">${item.result}</span>`;
+        function handleLogout() {
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('main-app').classList.add('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            
+            // Khôi phục lại dữ liệu mặc định ban đầu
+            workData = JSON.parse(JSON.stringify(initialWorkData));
+            planData = JSON.parse(JSON.stringify(initialPlanData));
         }
 
-        return `
-            <tr class="hover:bg-slate-50">
-                <td class="p-3 font-semibold text-slate-800">${item.field}</td>
-                <td class="p-3 text-slate-600">${item.subtype || '-'}</td>
-                <td class="p-3">${item.docNum}</td>
-                <td class="p-3">${item.content}</td>
-                <td class="p-3">${item.deadline}</td>
-                <td class="p-3"><span class="bg-blue-50 text-blue-700 px-2 py-1 rounded-md text-[11px]">${item.progress}</span></td>
-                <td class="p-3">${resultBadge}</td>
-                <td class="p-3 text-red-600">${item.reason}</td>
-                <td class="p-3 text-center">
-                    ${item.file ? `<a href="#" title="${item.file}" class="text-blue-600 hover:text-blue-800"><i class="fa-solid fa-paperclip text-sm"></i></a>` : `<span class="text-slate-300">-</span>`}
-                </td>
-                <td class="p-3 text-center">
-                    <button onclick="deleteWork(${item.id})" class="text-slate-400 hover:text-red-600 transition-all"><i class="fa-solid fa-trash"></i></button>
-                </td>
-            </tr>
-        `;
-    }).join('');
-}
+        function switchTab(tabId) {
+            document.getElementById('tab-dashboard').classList.add('hidden');
+            document.getElementById('tab-thuc-hien').classList.add('hidden');
+            document.getElementById('tab-ke-hoach').classList.add('hidden');
+            
+            document.getElementById('btn-tab-dashboard').className = 'pb-3 px-4 font-semibold text-slate-500 hover:text-blue-600 transition-all flex items-center gap-2 whitespace-nowrap';
+            document.getElementById('btn-tab-thuc-hien').className = 'pb-3 px-4 font-semibold text-slate-500 hover:text-blue-600 transition-all flex items-center gap-2 whitespace-nowrap';
+            document.getElementById('btn-tab-ke-hoach').className = 'pb-3 px-4 font-semibold text-slate-500 hover:text-blue-600 transition-all flex items-center gap-2 whitespace-nowrap';
 
-// Thêm kế hoạch tuần tới
-async function addPlanReport(event) {
-    event.preventDefault();
-    const newItem = {
-        id: Date.now(),
-        field: document.getElementById('plan-field').value,
-        docNum: document.getElementById('plan-doc-num').value || '-',
-        content: document.getElementById('plan-content').value,
-        deadline: document.getElementById('plan-deadline').value
-    };
+            document.getElementById(tabId).classList.remove('hidden');
 
-    planData.unshift(newItem);
-    renderPlanTable();
-    document.getElementById('form-plan').reset();
-    document.getElementById('plan-week').value = "2026-W38";
+            if (tabId === 'tab-dashboard') {
+                document.getElementById('btn-tab-dashboard').className = 'pb-3 px-4 font-semibold text-blue-600 border-b-2 border-blue-600 transition-all flex items-center gap-2 whitespace-nowrap';
+                updateDashboard();
+            } else if (tabId === 'tab-thuc-hien') {
+                document.getElementById('btn-tab-thuc-hien').className = 'pb-3 px-4 font-semibold text-blue-600 border-b-2 border-blue-600 transition-all flex items-center gap-2 whitespace-nowrap';
+                renderWorkTable();
+            } else {
+                document.getElementById('btn-tab-ke-hoach').className = 'pb-3 px-4 font-semibold text-green-600 border-b-2 border-green-600 transition-all flex items-center gap-2 whitespace-nowrap';
+                renderPlanTable();
+            }
+        }
 
-    try {
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({ action: 'addPlan', data: newItem })
-        });
-    } catch(e) { console.error(e); }
-}
+        function toggleOpticalSubtypes() {
+            const field = document.getElementById('work-field').value;
+            const container = document.getElementById('container-optical-subtype');
+            if (field === 'Cáp quang') {
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+            }
+        }
 
-// Render Bảng kế hoạch
-function renderPlanTable() {
-    const tbody = document.getElementById('plan-table-body');
-    if(!tbody) return;
+        function calculateStatus() {
+            const deadlineVal = document.getElementById('work-deadline').value;
+            const progressVal = document.getElementById('work-progress').value;
+            const completedVal = document.getElementById('work-completed-date').value;
+            const resultInput = document.getElementById('work-result');
 
-    tbody.innerHTML = planData.map((item, index) => `
-        <tr class="hover:bg-slate-50">
-            <td class="p-3 text-center">${index + 1}</td>
-            <td class="p-3 font-semibold text-slate-800">${item.field}</td>
-            <td class="p-3">${item.docNum}</td>
-            <td class="p-3">${item.content}</td>
-            <td class="p-3 text-blue-700 font-medium">${item.deadline}</td>
-            <td class="p-3 text-center">
-                <button onclick="deletePlan(${item.id})" class="text-slate-400 hover:text-red-600 transition-all"><i class="fa-solid fa-trash"></i></button>
-            </td>
-        </tr>
-    `).join('');
-}
+            if (!deadlineVal) {
+                resultInput.value = '';
+                resultInput.className = 'w-full bg-slate-100 font-bold border border-slate-300 rounded-lg p-2 text-sm outline-none';
+                return;
+            }
 
-// Xóa dòng dữ liệu
-async function deleteWork(id) {
-    workData = workData.filter(i => i.id !== id);
-    renderWorkTable();
-    updateDashboard();
-    await fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'deleteWork', id: id })
-    });
-}
+            const deadlineDate = new Date(deadlineVal);
+            const compareDate = completedVal ? new Date(completedVal) : new Date();
 
-async function deletePlan(id) {
-    planData = planData.filter(i => i.id !== id);
-    renderPlanTable();
-    await fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'deletePlan', id: id })
-    });
-}
+            deadlineDate.setHours(0,0,0,0);
+            compareDate.setHours(0,0,0,0);
 
-// ================= NÚT XUẤT BÁO CÁO EXCEL =================
-function exportToExcel() {
-    const weekVal = document.getElementById('select-week-global').value || '2026-W37';
-    
-    // 1. Dữ liệu Sheet Dashboard Thống kê
-    const capQuangList = workData.filter(i => i.field === 'Cáp quang');
-    let cqChuQuan = 0, cqTrachNhiem = 0, cqSuyHao = 0, cqThienTai = 0, cqNguyCoCao = 0;
-    capQuangList.forEach(item => {
-        const sub = item.subtype || '';
-        const content = item.content || '';
-        if (sub === 'Do chủ quan' || content.toLowerCase().includes('chủ quan')) cqChuQuan++;
-        if (sub === 'Chưa hoàn thành trách nhiệm' || content.toLowerCase().includes('trách nhiệm')) cqTrachNhiem++;
-        if (sub === 'Suy hao / Đứt sợi' || content.toLowerCase().includes('suy hao') || content.toLowerCase().includes('đứt')) cqSuyHao++;
-        if (sub === 'Do thiên tai' || content.toLowerCase().includes('thiên tai')) cqThienTai++;
-        if (sub === 'Đã báo nguy cơ cao' || content.toLowerCase().includes('nguy cơ')) cqNguyCoCao++;
-    });
+            if (progressVal === 'Đã hoàn thành') {
+                if (completedVal && new Date(completedVal) > deadlineDate) {
+                    resultInput.value = 'Hoàn thành (Quá hạn)';
+                    resultInput.className = 'w-full bg-orange-100 text-orange-700 font-bold border border-orange-300 rounded-lg p-2 text-sm outline-none';
+                } else {
+                    resultInput.value = 'Đã hoàn thành';
+                    resultInput.className = 'w-full bg-green-100 text-green-700 font-bold border border-green-300 rounded-lg p-2 text-sm outline-none';
+                }
+            } else if (progressVal === 'Đang thực hiện') {
+                if (compareDate > deadlineDate) {
+                    resultInput.value = 'Quá hạn';
+                    resultInput.className = 'w-full bg-red-100 text-red-700 font-bold border border-red-300 rounded-lg p-2 text-sm outline-none';
+                } else {
+                    resultInput.value = 'Đang thực hiện';
+                    resultInput.className = 'w-full bg-yellow-100 text-yellow-700 font-bold border border-yellow-300 rounded-lg p-2 text-sm outline-none';
+                }
+            }
+        }
 
-    const summaryData = [
-        ["ĐÀI VIỄN THÔNG NGHỆ AN - BÁO CÁO THỐNG KÊ TUẦN", weekVal],
-        [""],
-        ["CHỈ TIÊU / HẠ TẦNG SỰ CỐ", "SỐ LƯỢNG SỰ CỐ / PHIÊN"],
-        ["Tổng sự cố Cáp quang", capQuangList.length],
-        ["  - Do chủ quan", cqChuQuan],
-        ["  - Do chưa hoàn thành trách nhiệm", cqTrachNhiem],
-        ["  - Do suy hao / đứt sợi", cqSuyHao],
-        ["  - Do thiên tai", cqThienTai],
-        ["  - Đã báo nguy cơ cao", cqNguyCoCao],
-        ["Tổng sự cố thiết bị truyền dẫn", workData.filter(i => i.field === 'Truyền dẫn').length],
-        ["Tổng sự cố thiết bị CMIP", workData.filter(i => i.field === 'CMIP').length],
-        ["Tổng sự cố nguồn điện", workData.filter(i => i.field === 'Nguồn điện').length],
-        ["Tổng sự cố điều hòa", workData.filter(i => i.field === 'Điều hòa').length],
-        ["Tổng các phiên truyền hình", workData.filter(i => i.field === 'Truyền hình').length],
-        [""],
-        ["TỔNG QUAN CÔNG VIỆC THỰC HIỆN"],
-        ["Tổng số công việc", workData.length],
-        ["Đã hoàn thành", workData.filter(i => String(i.result).includes('Hoàn thành')).length],
-        ["Đang thực hiện", workData.filter(i => String(i.result) === 'Đang thực hiện').length],
-        ["Quá hạn / Chậm tiến độ", workData.filter(i => String(i.result).includes('Quá hạn')).length]
-    ];
+        function updateDashboard() {
+            const capQuangList = workData.filter(i => i.field === 'Cáp quang');
+            document.getElementById('stat-cap-quang-total').innerText = capQuangList.length;
 
-    // 2. Dữ liệu Sheet Công việc thực hiện
-    const workExportData = [
-        ["STT", "Lĩnh Vực", "Phân Loại Chi Tiết", "Số Văn Bản", "Nội Dung Công Việc / Sự Cố", "Hạn Hoàn Thành", "Tiến Độ", "Kết Quả Thực Hiện", "Nguyên Nhân Chậm Tiến Độ"]
-    ];
-    workData.forEach((item, idx) => {
-        workExportData.push([
-            idx + 1,
-            item.field,
-            item.subtype || '-',
-            item.docNum || '-',
-            item.content,
-            item.deadline,
-            item.progress,
-            item.result,
-            item.reason || '-'
-        ]);
-    });
+            let cqChuQuan = 0, cqTrachNhiem = 0, cqSuyHao = 0, cqThienTai = 0, cqNguyCoCao = 0, cqKhachQuan = 0;
+            
+            capQuangList.forEach(item => {
+                const sub = item.subtype || '';
+                if (sub === 'Do chủ quan') cqChuQuan++;
+                else if (sub === 'Chưa hoàn thành trách nhiệm') cqTrachNhiem++;
+                else if (sub === 'Suy hao / Đứt sợi') cqSuyHao++;
+                else if (sub === 'Do thiên tai') cqThienTai++;
+                else if (sub === 'Do khách quan') cqKhachQuan++;
+                else if (sub === 'Đã báo nguy cơ cao') cqNguyCoCao++;
+            });
 
-    // 3. Dữ liệu Sheet Kế hoạch tuần tới
-    const planExportData = [
-        ["STT", "Lĩnh Vực", "Số Văn Bản Liên Quan", "Nội Dung Kế Hoạch Dự Kiến", "Hạn Hoàn Thành Dự Kiến"]
-    ];
-    planData.forEach((item, idx) => {
-        planExportData.push([
-            idx + 1,
-            item.field,
-            item.docNum || '-',
-            item.content,
-            item.deadline
-        ]);
-    });
+            document.getElementById('stat-cq-khach-quan').innerText = cqKhachQuan;
+            document.getElementById('stat-cq-chu-quan').innerText = cqChuQuan;
+            document.getElementById('stat-cq-trach-nhiem').innerText = cqTrachNhiem;
+            document.getElementById('stat-cq-suy-hao').innerText = cqSuyHao;
+            document.getElementById('stat-cq-thien-tai').innerText = cqThienTai;
+            document.getElementById('stat-cq-nguy-co-cao').innerText = cqNguyCoCao;
 
-    // Tạo Workbook bằng SheetJS
-    const wb = XLSX.utils.book_new();
+            document.getElementById('stat-truyen-dan').innerText = workData.filter(i => i.field === 'Truyền dẫn').length;
+            document.getElementById('stat-cmip').innerText = workData.filter(i => i.field === 'CMIP').length;
+            document.getElementById('stat-nguon-dien').innerText = workData.filter(i => i.field === 'Nguồn điện').length;
+            document.getElementById('stat-dieu-hoa').innerText = workData.filter(i => i.field === 'Điều hòa').length;
+            document.getElementById('stat-truyen-hinh').innerText = workData.filter(i => i.field === 'Truyền hình').length;
 
-    const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
-    const wsWork = XLSX.utils.aoa_to_sheet(workExportData);
-    const wsPlan = XLSX.utils.aoa_to_sheet(planExportData);
+            const totalWork = workData.length;
+            const completedWork = workData.filter(i => String(i.result).includes('Đã hoàn thành') || String(i.result).includes('Hoàn thành')).length;
+            const overdueWork = workData.filter(i => String(i.result).includes('Quá hạn')).length;
+            const ongoingWork = totalWork - completedWork - overdueWork;
 
-    // Chỉnh độ rộng cột
-    wsSummary['!cols'] = [{ wch: 35 }, { wch: 20 }];
-    wsWork['!cols'] = [{ wch: 6 }, { wch: 15 }, { wch: 25 }, { wch: 15 }, { wch: 45 }, { wch: 15 }, { wch: 15 }, { wch: 20 }, { wch: 30 }];
-    wsPlan['!cols'] = [{ wch: 6 }, { wch: 15 }, { wch: 20 }, { wch: 50 }, { wch: 22 }];
+            document.getElementById('dash-total-work').innerText = totalWork;
+            document.getElementById('dash-completed-work').innerText = completedWork;
+            document.getElementById('dash-ongoing-work').innerText = ongoingWork;
+            document.getElementById('dash-overdue-work').innerText = overdueWork;
+        }
 
-    XLSX.utils.book_append_sheet(wb, wsSummary, "Dashboard Thống Kê");
-    XLSX.utils.book_append_sheet(wb, wsWork, "Cong_Viec_Tuan");
-    XLSX.utils.book_append_sheet(wb, wsPlan, "Ke_Hoach_Tuan_Toi");
+        async function addWorkReport(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('work-file');
+            const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : '';
+            const fieldVal = document.getElementById('work-field').value;
 
-    // Tải xuống file Excel
-    XLSX.writeFile(wb, `Bao_Cao_Cong_Viec_VNPT_${weekVal}.xlsx`);
-}
+            const newItem = {
+                id: Date.now(),
+                field: fieldVal,
+                subtype: fieldVal === 'Cáp quang' ? document.getElementById('work-optical-subtype').value : '-',
+                docNum: document.getElementById('work-doc-num').value || '-',
+                content: document.getElementById('work-content').value,
+                deadline: document.getElementById('work-deadline').value,
+                progress: document.getElementById('work-progress').value,
+                result: document.getElementById('work-result').value || 'Đang thực hiện',
+                reason: document.getElementById('work-reason').value || '-',
+                file: fileName
+            };
 
+            workData.unshift(newItem);
+            renderWorkTable();
+            updateDashboard();
+
+            document.getElementById('form-work').reset();
+            document.getElementById('work-week').value = "2026-W37";
+            document.getElementById('container-optical-subtype').classList.add('hidden');
+
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'addWork', data: newItem })
+                });
+            } catch(e) { console.error("Error saving to sheet:", e); }
+        }
+
+        function renderWorkTable() {
+            const tbody = document.getElementById('work-table-body');
+            if(!tbody) return;
+
+            tbody.innerHTML = workData.map(item => {
+                let resultBadge = '';
+                if (String(item.result).includes('Đã hoàn thành')) {
+                    resultBadge = `<span class="bg-green-100 text-green-700 font-bold px-2 py-1 rounded-md text-[11px]">${item.result}</span>`;
+                } else if (String(item.result).includes('Quá hạn')) {
+                    resultBadge = `<span class="bg-red-100 text-red-700 font-bold px-2 py-1 rounded-md text-[11px]">${item.result}</span>`;
+                } else {
+                    resultBadge = `<span class="bg-yellow-100 text-yellow-700 font-bold px-2 py-1 rounded-md text-[11px]">${item.result}</span>`;
+                }
+
+                return `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-3 font-semibold text-slate-800">${item.field}</td>
+                        <td class="p-3 text-slate-600">${item.subtype || '-'}</td>
+                        <td class="p-3">${item.docNum || '-'}</td>
+                        <td class="p-3">${item.content}</td>
+                        <td class="p-3">${item.deadline}</td>
+                        <td class="p-3"><span class="bg-blue-50 text-blue-700 px-2 py-1 rounded-md text-[11px]">${item.progress}</span></td>
+                        <td class="p-3">${resultBadge}</td>
+                        <td class="p-3 text-red-600">${item.reason || '-'}</td>
+                        <td class="p-3 text-center">
+                            ${item.file ? `<a href="#" title="${item.file}" class="text-blue-600 hover:text-blue-800"><i class="fa-solid fa-paperclip text-sm"></i></a>` : `<span class="text-slate-300">-</span>`}
+                        </td>
+                        <td class="p-3 text-center">
+                            <button onclick="deleteWork(${item.id})" class="text-slate-400 hover:text-red-600 transition-all"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        async function addPlanReport(event) {
+            event.preventDefault();
+            const newItem = {
+                id: Date.now(),
+                field: document.getElementById('plan-field').value,
+                docNum: document.getElementById('plan-doc-num').value || '-',
+                content: document.getElementById('plan-content').value,
+                deadline: document.getElementById('plan-deadline').value
+            };
+
+            planData.unshift(newItem);
+            renderPlanTable();
+            document.getElementById('form-plan').reset();
+            document.getElementById('plan-week').value = "2026-W38";
+
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'addPlan', data: newItem })
+                });
+            } catch(e) { console.error(e); }
+        }
+
+        function renderPlanTable() {
+            const tbody = document.getElementById('plan-table-body');
+            if(!tbody) return;
+
+            tbody.innerHTML = planData.map((item, index) => `
+                <tr class="hover:bg-slate-50">
+                    <td class="p-3 text-center">${index + 1}</td>
+                    <td class="p-3 font-semibold text-slate-800">${item.field}</td>
+                    <td class="p-3">${item.docNum || '-'}</td>
+                    <td class="p-3">${item.content}</td>
+                    <td class="p-3 text-blue-700 font-medium">${item.deadline}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="deletePlan(${item.id})" class="text-slate-400 hover:text-red-600 transition-all"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function deleteWork(id) {
+            workData = workData.filter(i => i.id !== id);
+            renderWorkTable();
+            updateDashboard();
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'deleteWork', id: id })
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        async function deletePlan(id) {
+            planData = planData.filter(i => i.id !== id);
+            renderPlanTable();
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'deletePlan', id: id })
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        function exportToExcel() {
+            const weekVal = document.getElementById('select-week-global').value || '2026-W37';
+            
+            const capQuangList = workData.filter(i => i.field === 'Cáp quang');
+            let cqChuQuan = 0, cqTrachNhiem = 0, cqSuyHao = 0, cqThienTai = 0, cqNguyCoCao = 0;
+            capQuangList.forEach(item => {
+                const sub = item.subtype || '';
+                const content = item.content || '';
+                if (sub === 'Do chủ quan' || content.toLowerCase().includes('chủ quan')) cqChuQuan++;
+                if (sub === 'Chưa hoàn thành trách nhiệm' || content.toLowerCase().includes('trách nhiệm')) cqTrachNhiem++;
+                if (sub === 'Suy hao / Đứt sợi' || content.toLowerCase().includes('suy hao') || content.toLowerCase().includes('đứt')) cqSuyHao++;
+                if (sub === 'Do thiên tai' || content.toLowerCase().includes('thiên tai')) cqThienTai++;
+                if (sub === 'Đã báo nguy cơ cao' || content.toLowerCase().includes('nguy cơ')) cqNguyCoCao++;
+            });
+
+            const summaryData = [
+                ["ĐÀI VIỄN THÔNG NGHỆ AN - BÁO CÁO THỐNG KÊ TUẦN", weekVal],
+                [""],
+                ["CHỈ TIÊU / HẠ TẦNG SỰ CỐ", "SỐ LƯỢNG SỰ CỐ / PHIÊN"],
+                ["Tổng sự cố Cáp quang", capQuangList.length],
+                ["  - Do chủ quan", cqChuQuan],
+                ["  - Do chưa hoàn thành trách nhiệm", cqTrachNhiem],
+                ["  - Do suy hao / đứt sợi", cqSuyHao],
+                ["  - Do thiên tai", cqThienTai],
+                ["  - Đã báo nguy cơ cao", cqNguyCoCao],
+                ["Tổng sự cố thiết bị truyền dẫn", workData.filter(i => i.field === 'Truyền dẫn').length],
+                ["Tổng sự cố thiết bị CMIP", workData.filter(i => i.field === 'CMIP').length],
+                ["Tổng sự cố nguồn điện", workData.filter(i => i.field === 'Nguồn điện').length],
+                ["Tổng sự cố điều hòa", workData.filter(i => i.field === 'Điều hòa').length],
+                ["Tổng các phiên truyền hình", workData.filter(i => i.field === 'Truyền hình').length],
+                [""],
+                ["TỔNG QUAN CÔNG VIỆC THỰC HIỆN"],
+                ["Tổng số công việc", workData.length],
+                ["Đã hoàn thành", workData.filter(i => String(i.result).includes('Hoàn thành')).length],
+                ["Đang thực hiện", workData.filter(i => String(i.result) === 'Đang thực hiện').length],
+                ["Quá hạn / Chậm tiến độ", workData.filter(i => String(i.result).includes('Quá hạn')).length]
+            ];
+
+            const workExportData = [
+                ["STT", "Lĩnh Vực", "Phân Loại Chi Tiết", "Số Văn Bản", "Nội Dung Công Việc / Sự Cố", "Hạn Hoàn Thành", "Tiến Độ", "Kết Quả Thực Hiện", "Nguyên Nhân Chậm Tiến Độ"]
+            ];
+            workData.forEach((item, idx) => {
+                workExportData.push([
+                    idx + 1,
+                    item.field,
+                    item.subtype || '-',
+                    item.docNum || '-',
+                    item.content,
+                    item.deadline,
+                    item.progress,
+                    item.result,
+                    item.reason || '-'
+                ]);
+            });
+
+            const planExportData = [
+                ["STT", "Lĩnh Vực", "Số Văn Bản Liên Quan", "Nội Dung Kế Hoạch Dự Kiến", "Hạn Hoàn Thành Dự Kiến"]
+            ];
+            planData.forEach((item, idx) => {
+                planExportData.push([
+                    idx + 1,
+                    item.field,
+                    item.docNum || '-',
+                    item.content,
+                    item.deadline
+                ]);
+            });
+
+            const wb = XLSX.utils.book_new();
+
+            const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+            const wsWork = XLSX.utils.aoa_to_sheet(workExportData);
+            const wsPlan = XLSX.utils.aoa_to_sheet(planExportData);
+
+            wsSummary['!cols'] = [{ wch: 35 }, { wch: 20 }];
+            wsWork['!cols'] = [{ wch: 6 }, { wch: 15 }, { wch: 25 }, { wch: 15 }, { wch: 45 }, { wch: 15 }, { wch: 15 }, { wch: 20 }, { wch: 30 }];
+            wsPlan['!cols'] = [{ wch: 6 }, { wch: 15 }, { wch: 20 }, { wch: 50 }, { wch: 22 }];
+
+            XLSX.utils.book_append_sheet(wb, wsSummary, "Dashboard Thống Kê");
+            XLSX.utils.book_append_sheet(wb, wsWork, "Cong_Viec_Tuan");
+            XLSX.utils.book_append_sheet(wb, wsPlan, "Ke_Hoach_Tuan_Toi");
+
+            XLSX.writeFile(wb, `Bao_Cao_Cong_Viec_VNPT_${weekVal}.xlsx`);
+        }
     </script>
 </body>
 </html>
