@@ -22,7 +22,6 @@
             <!-- Header Login -->
             <div class="bg-gradient-to-r from-blue-700 to-blue-600 p-8 text-center text-white relative">
                 <div class="bg-white p-3 rounded-xl inline-block shadow-md mb-3">
-                    <!-- Logo VNPT Vector/SVG -->
                     <svg class="w-16 h-12" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M10,20 Q40,5 75,30 Q90,40 85,60 Q80,75 50,75 Q20,75 15,50 Q10,35 30,25" stroke="#005BAA" stroke-width="12" fill="none" stroke-linecap="round"/>
                         <circle cx="50" cy="45" r="14" fill="#005BAA"/>
@@ -131,10 +130,7 @@
 
         <!-- ================= SECTION 0: DASHBOARD THỐNG KÊ ================= -->
         <section id="tab-dashboard" class="space-y-6">
-            
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                
-                <!-- 1. Sự cố Cáp Quang (Đã sửa lỗi đóng thẻ div) -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 col-span-1 md:col-span-2 lg:col-span-1 relative overflow-hidden">
                     <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
                         <div class="flex items-center gap-2.5">
@@ -180,7 +176,6 @@
                     </div>
                 </div>
 
-                <!-- 2. Sự cố Thiết bị Truyền dẫn -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
@@ -199,7 +194,6 @@
                     </div>
                 </div>
 
-                <!-- 3. Sự cố Thiết bị CMIP -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
@@ -218,7 +212,6 @@
                     </div>
                 </div>
 
-                <!-- 4. Sự cố Nguồn điện -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
@@ -237,7 +230,6 @@
                     </div>
                 </div>
 
-                <!-- 5. Sự cố Điều hòa -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
@@ -256,7 +248,6 @@
                     </div>
                 </div>
 
-                <!-- 6. Phiên truyền hình -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
@@ -274,10 +265,8 @@
                         <span id="stat-truyen-hinh" class="text-3xl font-extrabold text-purple-600">0</span>
                     </div>
                 </div>
-
             </div>
 
-            <!-- Tổng hợp tiến độ chung -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
                 <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-chart-line text-blue-600"></i> Báo Cáo Tổng Quan Tiến Độ Công Việc Tuần
@@ -301,7 +290,6 @@
                     </div>
                 </div>
             </div>
-
         </section>
 
         <!-- SECTION 1: CÔNG VIỆC THỰC HIỆN TRONG TUẦN -->
@@ -332,7 +320,6 @@
                         </select>
                     </div>
 
-                    <!-- Trường chọn phân loại chi tiết cho Cáp quang -->
                     <div id="container-optical-subtype" class="hidden">
                         <label class="block text-xs font-semibold text-indigo-700 mb-1">Phân loại sự cố Cáp quang</label>
                         <select id="work-optical-subtype" class="w-full border border-indigo-200 bg-indigo-50/50 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
@@ -501,6 +488,86 @@
 
     </div>
 
+    <!-- ================= 3. MODAL CHỈNH SỬA CÔNG VIỆC ================= -->
+    <div id="edit-work-modal" class="hidden fixed inset-0 bg-slate-900/50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden">
+            <div class="bg-blue-600 px-6 py-4 text-white flex justify-between items-center">
+                <h3 class="font-bold text-base flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square"></i> Chỉnh Sửa Báo Cáo Công Việc
+                </h3>
+                <button onclick="closeEditWorkModal()" class="text-white/80 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="edit-work-form" onsubmit="saveWorkEdit(event)" class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="hidden" id="edit-work-id">
+                
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Lĩnh vực</label>
+                    <select id="edit-work-field" required onchange="toggleEditOpticalSubtypes()" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="Vô tuyến">Vô tuyến</option>
+                        <option value="CMIP">CMIP</option>
+                        <option value="Truyền dẫn">Truyền dẫn</option>
+                        <option value="Cáp quang">Cáp quang</option>
+                        <option value="Truyền hình">Truyền hình</option>
+                        <option value="Nguồn điện">Nguồn điện</option>
+                        <option value="Điều hòa">Điều hòa</option>
+                    </select>
+                </div>
+
+                <div id="edit-container-optical-subtype" class="hidden">
+                    <label class="block text-xs font-semibold text-indigo-700 mb-1">Phân loại sự cố Cáp quang</label>
+                    <select id="edit-work-optical-subtype" class="w-full border border-indigo-200 bg-indigo-50/50 rounded-lg p-2 text-sm outline-none">
+                        <option value="Suy hao / Đứt sợi">Suy hao / Đứt sợi</option>
+                        <option value="Do chủ quan">Do chủ quan</option>
+                        <option value="Chưa hoàn thành trách nhiệm">Chưa hoàn thành trách nhiệm</option>
+                        <option value="Do khách quan">Do khách quan</option>
+                        <option value="Do thiên tai">Do thiên tai</option>
+                        <option value="Đã báo nguy cơ cao">Đã báo nguy cơ cao</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Số văn bản</label>
+                    <input type="text" id="edit-work-doc-num" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Hạn hoàn thành</label>
+                    <input type="date" id="edit-work-deadline" required onchange="calculateEditStatus()" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Nội dung công việc</label>
+                    <input type="text" id="edit-work-content" required class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Trạng thái tiến độ</label>
+                    <select id="edit-work-progress" required onchange="calculateEditStatus()" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="Đang thực hiện">Đang thực hiện</option>
+                        <option value="Đã hoàn thành">Đã hoàn thành</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Kết quả thực hiện</label>
+                    <input type="text" id="edit-work-result" readonly class="w-full bg-slate-100 font-bold border border-slate-300 rounded-lg p-2 text-sm outline-none">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Nguyên nhân chậm tiến độ</label>
+                    <input type="text" id="edit-work-reason" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
+                <div class="md:col-span-2 flex justify-end gap-2 mt-4 pt-3 border-t">
+                    <button type="button" onclick="closeEditWorkModal()" class="px-4 py-2 text-xs bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 font-medium">Hủy bỏ</button>
+                    <button type="submit" class="px-5 py-2 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium flex items-center gap-1.5">
+                        <i class="fa-solid fa-check"></i> Cập Nhật
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- JavaScript Logic xử lý ứng dụng -->
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbycvEZ4sXp1cXN3zu3cCkgKE3P7g2M69cuPK50B3TWoqimXqxoM6KIVKNqn6Svn0ACy/exec";
@@ -546,7 +613,7 @@
                     if(Array.isArray(fetchedPlan) && fetchedPlan.length > 0) planData = fetchedPlan;
                 }
             } catch (error) {
-                console.warn("Đang sử dụng dữ liệu offline / chưa kết nối Google Sheets:", error);
+                console.warn("Đang sử dụng dữ liệu offline:", error);
             } finally {
                 updateDashboard();
                 renderWorkTable();
@@ -569,10 +636,7 @@
                 document.getElementById('work-week').value = "2026-W37";
                 document.getElementById('plan-week').value = "2026-W38";
 
-                // Đảm bảo hiển thị tab Dashboard mặc định
                 switchTab('tab-dashboard');
-                
-                // Tải dữ liệu và render lại toàn bộ giao diện
                 loadDataFromGoogleSheets();
             } else {
                 errorEl.classList.remove('hidden');
@@ -585,7 +649,6 @@
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
             
-            // Khôi phục lại dữ liệu mặc định ban đầu
             workData = JSON.parse(JSON.stringify(initialWorkData));
             planData = JSON.parse(JSON.stringify(initialPlanData));
         }
@@ -616,11 +679,15 @@
         function toggleOpticalSubtypes() {
             const field = document.getElementById('work-field').value;
             const container = document.getElementById('container-optical-subtype');
-            if (field === 'Cáp quang') {
-                container.classList.remove('hidden');
-            } else {
-                container.classList.add('hidden');
-            }
+            if (field === 'Cáp quang') container.classList.remove('hidden');
+            else container.classList.add('hidden');
+        }
+
+        function toggleEditOpticalSubtypes() {
+            const field = document.getElementById('edit-work-field').value;
+            const container = document.getElementById('edit-container-optical-subtype');
+            if (field === 'Cáp quang') container.classList.remove('hidden');
+            else container.classList.add('hidden');
         }
 
         function calculateStatus() {
@@ -631,31 +698,48 @@
 
             if (!deadlineVal) {
                 resultInput.value = '';
-                resultInput.className = 'w-full bg-slate-100 font-bold border border-slate-300 rounded-lg p-2 text-sm outline-none';
                 return;
             }
 
             const deadlineDate = new Date(deadlineVal);
             const compareDate = completedVal ? new Date(completedVal) : new Date();
-
             deadlineDate.setHours(0,0,0,0);
             compareDate.setHours(0,0,0,0);
 
             if (progressVal === 'Đã hoàn thành') {
                 if (completedVal && new Date(completedVal) > deadlineDate) {
                     resultInput.value = 'Hoàn thành (Quá hạn)';
-                    resultInput.className = 'w-full bg-orange-100 text-orange-700 font-bold border border-orange-300 rounded-lg p-2 text-sm outline-none';
                 } else {
                     resultInput.value = 'Đã hoàn thành';
-                    resultInput.className = 'w-full bg-green-100 text-green-700 font-bold border border-green-300 rounded-lg p-2 text-sm outline-none';
                 }
             } else if (progressVal === 'Đang thực hiện') {
                 if (compareDate > deadlineDate) {
                     resultInput.value = 'Quá hạn';
-                    resultInput.className = 'w-full bg-red-100 text-red-700 font-bold border border-red-300 rounded-lg p-2 text-sm outline-none';
                 } else {
                     resultInput.value = 'Đang thực hiện';
-                    resultInput.className = 'w-full bg-yellow-100 text-yellow-700 font-bold border border-yellow-300 rounded-lg p-2 text-sm outline-none';
+                }
+            }
+        }
+
+        function calculateEditStatus() {
+            const deadlineVal = document.getElementById('edit-work-deadline').value;
+            const progressVal = document.getElementById('edit-work-progress').value;
+            const resultInput = document.getElementById('edit-work-result');
+
+            if (!deadlineVal) return;
+
+            const deadlineDate = new Date(deadlineVal);
+            const compareDate = new Date();
+            deadlineDate.setHours(0,0,0,0);
+            compareDate.setHours(0,0,0,0);
+
+            if (progressVal === 'Đã hoàn thành') {
+                resultInput.value = 'Đã hoàn thành';
+            } else {
+                if (compareDate > deadlineDate) {
+                    resultInput.value = 'Quá hạn';
+                } else {
+                    resultInput.value = 'Đang thực hiện';
                 }
             }
         }
@@ -690,7 +774,7 @@
             document.getElementById('stat-truyen-hinh').innerText = workData.filter(i => i.field === 'Truyền hình').length;
 
             const totalWork = workData.length;
-            const completedWork = workData.filter(i => String(i.result).includes('Đã hoàn thành') || String(i.result).includes('Hoàn thành')).length;
+            const completedWork = workData.filter(i => String(i.result).includes('Hoàn thành')).length;
             const overdueWork = workData.filter(i => String(i.result).includes('Quá hạn')).length;
             const ongoingWork = totalWork - completedWork - overdueWork;
 
@@ -762,12 +846,75 @@
                         <td class="p-3 text-center">
                             ${item.file ? `<a href="#" title="${item.file}" class="text-blue-600 hover:text-blue-800"><i class="fa-solid fa-paperclip text-sm"></i></a>` : `<span class="text-slate-300">-</span>`}
                         </td>
-                        <td class="p-3 text-center">
-                            <button onclick="deleteWork(${item.id})" class="text-slate-400 hover:text-red-600 transition-all"><i class="fa-solid fa-trash"></i></button>
+                        <td class="p-3 text-center flex items-center justify-center gap-2">
+                            <button onclick="openEditWorkModal(${item.id})" class="text-blue-600 hover:text-blue-800 transition-all p-1" title="Chỉnh sửa">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button onclick="deleteWork(${item.id})" class="text-slate-400 hover:text-red-600 transition-all p-1" title="Xóa">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
                         </td>
                     </tr>
                 `;
             }).join('');
+        }
+
+        /* --- XỬ LÝ SỬA BÁO CÁO CÔNG VIỆC --- */
+        function openEditWorkModal(id) {
+            const item = workData.find(i => i.id === id);
+            if (!item) return;
+
+            document.getElementById('edit-work-id').value = item.id;
+            document.getElementById('edit-work-field').value = item.field;
+            document.getElementById('edit-work-doc-num').value = item.docNum !== '-' ? item.docNum : '';
+            document.getElementById('edit-work-content').value = item.content;
+            document.getElementById('edit-work-deadline').value = item.deadline;
+            document.getElementById('edit-work-progress').value = item.progress;
+            document.getElementById('edit-work-result').value = item.result;
+            document.getElementById('edit-work-reason').value = item.reason !== '-' ? item.reason : '';
+
+            toggleEditOpticalSubtypes();
+            if (item.field === 'Cáp quang' && item.subtype) {
+                document.getElementById('edit-work-optical-subtype').value = item.subtype;
+            }
+
+            document.getElementById('edit-work-modal').classList.remove('hidden');
+        }
+
+        function closeEditWorkModal() {
+            document.getElementById('edit-work-modal').classList.add('hidden');
+        }
+
+        async function saveWorkEdit(event) {
+            event.preventDefault();
+            const id = Number(document.getElementById('edit-work-id').value);
+            const index = workData.findIndex(i => i.id === id);
+            if (index === -1) return;
+
+            const fieldVal = document.getElementById('edit-work-field').value;
+            const updatedItem = {
+                ...workData[index],
+                field: fieldVal,
+                subtype: fieldVal === 'Cáp quang' ? document.getElementById('edit-work-optical-subtype').value : '-',
+                docNum: document.getElementById('edit-work-doc-num').value || '-',
+                content: document.getElementById('edit-work-content').value,
+                deadline: document.getElementById('edit-work-deadline').value,
+                progress: document.getElementById('edit-work-progress').value,
+                result: document.getElementById('edit-work-result').value,
+                reason: document.getElementById('edit-work-reason').value || '-'
+            };
+
+            workData[index] = updatedItem;
+            renderWorkTable();
+            updateDashboard();
+            closeEditWorkModal();
+
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'updateWork', data: updatedItem })
+                });
+            } catch(e) { console.error("Error updating sheet:", e); }
         }
 
         async function addPlanReport(event) {
@@ -805,13 +952,14 @@
                     <td class="p-3">${item.content}</td>
                     <td class="p-3 text-blue-700 font-medium">${item.deadline}</td>
                     <td class="p-3 text-center">
-                        <button onclick="deletePlan(${item.id})" class="text-slate-400 hover:text-red-600 transition-all"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="deletePlan(${item.id})" class="text-slate-400 hover:text-red-600 transition-all p-1" title="Xóa"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
             `).join('');
         }
 
         async function deleteWork(id) {
+            if(!confirm("Bạn có chắc chắn muốn xóa báo cáo này?")) return;
             workData = workData.filter(i => i.id !== id);
             renderWorkTable();
             updateDashboard();
@@ -824,6 +972,7 @@
         }
 
         async function deletePlan(id) {
+            if(!confirm("Bạn có chắc chắn muốn xóa kế hoạch này?")) return;
             planData = planData.filter(i => i.id !== id);
             renderPlanTable();
             try {
@@ -836,7 +985,6 @@
 
         function exportToExcel() {
             const weekVal = document.getElementById('select-week-global').value || '2026-W37';
-            
             const capQuangList = workData.filter(i => i.field === 'Cáp quang');
             let cqChuQuan = 0, cqTrachNhiem = 0, cqSuyHao = 0, cqThienTai = 0, cqNguyCoCao = 0;
             capQuangList.forEach(item => {
@@ -877,15 +1025,7 @@
             ];
             workData.forEach((item, idx) => {
                 workExportData.push([
-                    idx + 1,
-                    item.field,
-                    item.subtype || '-',
-                    item.docNum || '-',
-                    item.content,
-                    item.deadline,
-                    item.progress,
-                    item.result,
-                    item.reason || '-'
+                    idx + 1, item.field, item.subtype || '-', item.docNum || '-', item.content, item.deadline, item.progress, item.result, item.reason || '-'
                 ]);
             });
 
@@ -894,16 +1034,11 @@
             ];
             planData.forEach((item, idx) => {
                 planExportData.push([
-                    idx + 1,
-                    item.field,
-                    item.docNum || '-',
-                    item.content,
-                    item.deadline
+                    idx + 1, item.field, item.docNum || '-', item.content, item.deadline
                 ]);
             });
 
             const wb = XLSX.utils.book_new();
-
             const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
             const wsWork = XLSX.utils.aoa_to_sheet(workExportData);
             const wsPlan = XLSX.utils.aoa_to_sheet(planExportData);
