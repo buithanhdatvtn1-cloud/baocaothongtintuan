@@ -530,9 +530,10 @@
                     <input type="text" id="edit-work-doc-num" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
 
+                <!-- Đã chỉnh sửa: Thay thế Hạn hoàn thành bằng Ngày hoàn thành -->
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">Hạn hoàn thành</label>
-                    <input type="date" id="edit-work-deadline" required onchange="calculateEditStatus()" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Ngày hoàn thành</label>
+                    <input type="date" id="edit-work-completed-date" onchange="calculateEditStatus()" class="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
 
                 <div class="md:col-span-2">
@@ -582,13 +583,13 @@
         };
 
         const initialWorkData = [
-            { id: 1, field: 'Cáp quang', subtype: 'Suy hao / Đứt sợi', docNum: '101/CV-TKN', content: 'Xử lý đứt cáp quang tuyến Vinh - Cửa Lò', deadline: '2026-09-08', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' },
-            { id: 2, field: 'Cáp quang', subtype: 'Đã báo nguy cơ cao', docNum: '102/CV-TKN', content: 'Phát hiện tuyến cáp QL1A nguy cơ bị va quệt do thi công đường', deadline: '2026-09-12', progress: 'Đang thực hiện', result: 'Đang thực hiện', reason: '-', file: '' },
-            { id: 3, field: 'Truyền dẫn', subtype: '-', docNum: '105/CV-TKN', content: 'Cảnh báo mất nguồn quạt máy trạm Ring 10G', deadline: '2026-09-09', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' },
-            { id: 4, field: 'CMIP', subtype: '-', docNum: '108/CV-TKN', content: 'Xử lý treo cổng switch core trung tâm', deadline: '2026-09-10', progress: 'Đang thực hiện', result: 'Đang thực hiện', reason: '-', file: '' },
-            { id: 5, field: 'Nguồn điện', subtype: '-', docNum: '110/CV-TKN', content: 'Sự cố mất điện lưới trạm BTS Nam Đàn, đã chạy máy phát', deadline: '2026-09-07', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' },
-            { id: 6, field: 'Điều hòa', subtype: '-', docNum: '112/CV-TKN', content: 'Sự cố hỏng lốc máy lạnh trạm Host Quỳ Hợp', deadline: '2026-09-11', progress: 'Đang thực hiện', result: 'Quá hạn', reason: 'Chờ linh kiện thay thế', file: '' },
-            { id: 7, field: 'Truyền hình', subtype: '-', docNum: '115/CV-TKN', content: 'Đảm bảo phiên truyền hình hội nghị UBND Tỉnh', deadline: '2026-09-09', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' }
+            { id: 1, field: 'Cáp quang', subtype: 'Suy hao / Đứt sợi', docNum: '101/CV-TKN', content: 'Xử lý đứt cáp quang tuyến Vinh - Cửa Lò', deadline: '2026-09-08', completedDate: '2026-09-08', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' },
+            { id: 2, field: 'Cáp quang', subtype: 'Đã báo nguy cơ cao', docNum: '102/CV-TKN', content: 'Phát hiện tuyến cáp QL1A nguy cơ bị va quệt do thi công đường', deadline: '2026-09-12', completedDate: '', progress: 'Đang thực hiện', result: 'Đang thực hiện', reason: '-', file: '' },
+            { id: 3, field: 'Truyền dẫn', subtype: '-', docNum: '105/CV-TKN', content: 'Cảnh báo mất nguồn quạt máy trạm Ring 10G', deadline: '2026-09-09', completedDate: '2026-09-09', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' },
+            { id: 4, field: 'CMIP', subtype: '-', docNum: '108/CV-TKN', content: 'Xử lý treo cổng switch core trung tâm', deadline: '2026-09-10', completedDate: '', progress: 'Đang thực hiện', result: 'Đang thực hiện', reason: '-', file: '' },
+            { id: 5, field: 'Nguồn điện', subtype: '-', docNum: '110/CV-TKN', content: 'Sự cố mất điện lưới trạm BTS Nam Đàn, đã chạy máy phát', deadline: '2026-09-07', completedDate: '2026-09-07', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' },
+            { id: 6, field: 'Điều hòa', subtype: '-', docNum: '112/CV-TKN', content: 'Sự cố hỏng lốc máy lạnh trạm Host Quỳ Hợp', deadline: '2026-09-11', completedDate: '', progress: 'Đang thực hiện', result: 'Quá hạn', reason: 'Chờ linh kiện thay thế', file: '' },
+            { id: 7, field: 'Truyền hình', subtype: '-', docNum: '115/CV-TKN', content: 'Đảm bảo phiên truyền hình hội nghị UBND Tỉnh', deadline: '2026-09-09', completedDate: '2026-09-09', progress: 'Đã hoàn thành', result: 'Đã hoàn thành', reason: '-', file: '' }
         ];
 
         const initialPlanData = [
@@ -721,21 +722,29 @@
             }
         }
 
+        /* Đã sửa: Tính toán trạng thái khi sửa đổi ngày hoàn thành trong Modal */
         function calculateEditStatus() {
-            const deadlineVal = document.getElementById('edit-work-deadline').value;
+            const id = Number(document.getElementById('edit-work-id').value);
+            const currentItem = workData.find(i => i.id === id);
+            const deadlineVal = currentItem ? currentItem.deadline : null;
             const progressVal = document.getElementById('edit-work-progress').value;
+            const completedVal = document.getElementById('edit-work-completed-date').value;
             const resultInput = document.getElementById('edit-work-result');
 
             if (!deadlineVal) return;
 
             const deadlineDate = new Date(deadlineVal);
-            const compareDate = new Date();
+            const compareDate = completedVal ? new Date(completedVal) : new Date();
             deadlineDate.setHours(0,0,0,0);
             compareDate.setHours(0,0,0,0);
 
             if (progressVal === 'Đã hoàn thành') {
-                resultInput.value = 'Đã hoàn thành';
-            } else {
+                if (completedVal && new Date(completedVal) > deadlineDate) {
+                    resultInput.value = 'Hoàn thành (Quá hạn)';
+                } else {
+                    resultInput.value = 'Đã hoàn thành';
+                }
+            } else if (progressVal === 'Đang thực hiện') {
                 if (compareDate > deadlineDate) {
                     resultInput.value = 'Quá hạn';
                 } else {
@@ -744,6 +753,7 @@
             }
         }
 
+        /* Đã sửa: Cập nhật chính xác số liệu Dashboard & Sự cố Cáp Quang */
         function updateDashboard() {
             const capQuangList = workData.filter(i => i.field === 'Cáp quang');
             document.getElementById('stat-cap-quang-total').innerText = capQuangList.length;
@@ -751,13 +761,19 @@
             let cqChuQuan = 0, cqTrachNhiem = 0, cqSuyHao = 0, cqThienTai = 0, cqNguyCoCao = 0, cqKhachQuan = 0;
             
             capQuangList.forEach(item => {
-                const sub = item.subtype || '';
-                if (sub === 'Do chủ quan') cqChuQuan++;
-                else if (sub === 'Chưa hoàn thành trách nhiệm') cqTrachNhiem++;
-                else if (sub === 'Suy hao / Đứt sợi') cqSuyHao++;
-                else if (sub === 'Do thiên tai') cqThienTai++;
-                else if (sub === 'Do khách quan') cqKhachQuan++;
-                else if (sub === 'Đã báo nguy cơ cao') cqNguyCoCao++;
+                const sub = (item.subtype || '').toLowerCase();
+                const text = ((item.content || '') + ' ' + (item.reason || '')).toLowerCase();
+
+                if (item.subtype === 'Do chủ quan' || sub.includes('chủ quan') || text.includes('chủ quan')) cqChuQuan++;
+                else if (item.subtype === 'Chưa hoàn thành trách nhiệm' || sub.includes('trách nhiệm') || text.includes('trách nhiệm')) cqTrachNhiem++;
+                else if (item.subtype === 'Suy hao / Đứt sợi' || sub.includes('suy hao') || sub.includes('đứt') || text.includes('suy hao') || text.includes('đứt')) cqSuyHao++;
+                else if (item.subtype === 'Do thiên tai' || sub.includes('thiên tai') || text.includes('thiên tai')) cqThienTai++;
+                else if (item.subtype === 'Đã báo nguy cơ cao' || sub.includes('nguy cơ') || text.includes('nguy cơ')) cqNguyCoCao++;
+                else if (item.subtype === 'Do khách quan' || sub.includes('khách quan') || text.includes('khách quan')) cqKhachQuan++;
+                else {
+                    // Mặc định phân loại nếu chưa gắn nhãn cụ thể
+                    cqSuyHao++;
+                }
             });
 
             document.getElementById('stat-cq-khach-quan').innerText = cqKhachQuan;
@@ -773,10 +789,11 @@
             document.getElementById('stat-dieu-hoa').innerText = workData.filter(i => i.field === 'Điều hòa').length;
             document.getElementById('stat-truyen-hinh').innerText = workData.filter(i => i.field === 'Truyền hình').length;
 
+            // Thống kê tiến độ công việc tổng hợp
             const totalWork = workData.length;
-            const completedWork = workData.filter(i => String(i.result).includes('Hoàn thành')).length;
-            const overdueWork = workData.filter(i => String(i.result).includes('Quá hạn')).length;
-            const ongoingWork = totalWork - completedWork - overdueWork;
+            const completedWork = workData.filter(i => String(i.result).includes('hoàn thành') || String(i.result).includes('Hoàn thành')).length;
+            const overdueWork = workData.filter(i => String(i.result).includes('Quá hạn') || String(i.result).includes('quá hạn')).length;
+            const ongoingWork = Math.max(0, totalWork - completedWork - overdueWork);
 
             document.getElementById('dash-total-work').innerText = totalWork;
             document.getElementById('dash-completed-work').innerText = completedWork;
@@ -797,6 +814,7 @@
                 docNum: document.getElementById('work-doc-num').value || '-',
                 content: document.getElementById('work-content').value,
                 deadline: document.getElementById('work-deadline').value,
+                completedDate: document.getElementById('work-completed-date').value || '',
                 progress: document.getElementById('work-progress').value,
                 result: document.getElementById('work-result').value || 'Đang thực hiện',
                 reason: document.getElementById('work-reason').value || '-',
@@ -825,7 +843,7 @@
 
             tbody.innerHTML = workData.map(item => {
                 let resultBadge = '';
-                if (String(item.result).includes('Đã hoàn thành')) {
+                if (String(item.result).includes('Đã hoàn thành') || String(item.result).includes('Hoàn thành')) {
                     resultBadge = `<span class="bg-green-100 text-green-700 font-bold px-2 py-1 rounded-md text-[11px]">${item.result}</span>`;
                 } else if (String(item.result).includes('Quá hạn')) {
                     resultBadge = `<span class="bg-red-100 text-red-700 font-bold px-2 py-1 rounded-md text-[11px]">${item.result}</span>`;
@@ -868,7 +886,7 @@
             document.getElementById('edit-work-field').value = item.field;
             document.getElementById('edit-work-doc-num').value = item.docNum !== '-' ? item.docNum : '';
             document.getElementById('edit-work-content').value = item.content;
-            document.getElementById('edit-work-deadline').value = item.deadline;
+            document.getElementById('edit-work-completed-date').value = item.completedDate || '';
             document.getElementById('edit-work-progress').value = item.progress;
             document.getElementById('edit-work-result').value = item.result;
             document.getElementById('edit-work-reason').value = item.reason !== '-' ? item.reason : '';
@@ -898,7 +916,7 @@
                 subtype: fieldVal === 'Cáp quang' ? document.getElementById('edit-work-optical-subtype').value : '-',
                 docNum: document.getElementById('edit-work-doc-num').value || '-',
                 content: document.getElementById('edit-work-content').value,
-                deadline: document.getElementById('edit-work-deadline').value,
+                completedDate: document.getElementById('edit-work-completed-date').value || '',
                 progress: document.getElementById('edit-work-progress').value,
                 result: document.getElementById('edit-work-result').value,
                 reason: document.getElementById('edit-work-reason').value || '-'
@@ -1015,9 +1033,9 @@
                 [""],
                 ["TỔNG QUAN CÔNG VIỆC THỰC HIỆN"],
                 ["Tổng số công việc", workData.length],
-                ["Đã hoàn thành", workData.filter(i => String(i.result).includes('Hoàn thành')).length],
+                ["Đã hoàn thành", workData.filter(i => String(i.result).includes('hoàn thành') || String(i.result).includes('Hoàn thành')).length],
                 ["Đang thực hiện", workData.filter(i => String(i.result) === 'Đang thực hiện').length],
-                ["Quá hạn / Chậm tiến độ", workData.filter(i => String(i.result).includes('Quá hạn')).length]
+                ["Quá hạn / Chậm tiến độ", workData.filter(i => String(i.result).includes('Quá hạn') || String(i.result).includes('quá hạn')).length]
             ];
 
             const workExportData = [
